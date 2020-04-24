@@ -1,51 +1,35 @@
 // Navigation/Navigations.js
-
-import React from 'react'
-import { StyleSheet, Image } from 'react-native'
-import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation'
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../Components/Login'
 import Home from '../Components/Home'
 
-const LoginStackNavigator = createStackNavigator({
-  Login: {
-    screen: Login,
-    navigationOptions: {
-      title: 'Login to the app'
-    }
-  },
-  Home: {
-    screen: Home
-  }
-})
+const Stack = createStackNavigator();
 
-const MainTabNavigator = createBottomTabNavigator(
-  {
-    Login: {
-      screen: LoginStackNavigator,
-      navigationOptions: {
-        tabBarIcon: () => {
-          return <Image
-            source={require('../Images/ic_login.png')}
-            style={styles.icon}/>
-        }
-      }
-    }
-  },
-  {
-    tabBarOptions: {
-      activeBackgroundColor: '#DDDDDD',
-      inactiveBackgroundColor: '#FFFFFF',
-      showLabel: false,
-      showIcon: true
-    }
-  }
-)
+function MyStack() {
+  return (
+    <Stack.Navigator 
+      initialRouteName="Login"
+      headerMode="screen"
+      screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: { backgroundColor: 'tomato' },
+      }}>
+      <Stack.Screen name="Login" component={Login} options={{
+          title: 'Login Screen',
+        }}/>
+      <Stack.Screen name="Home" component={Home} options={{
+          title: 'Hoem page',
+        }} />
+    </Stack.Navigator>
+  );
+}
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 30,
-    height: 30
-  }
-})
-
-export default createAppContainer(MainTabNavigator)
+export default function Navigation() {
+  return (
+    <NavigationContainer>
+      <MyStack />
+    </NavigationContainer>
+  );
+}

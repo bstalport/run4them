@@ -1,7 +1,7 @@
 // Components/Home.js
 
 import React from 'react'
-import { } from 'react-native'
+import { Text} from 'react-native'
 
 class Home extends React.Component {
   constructor(props) {

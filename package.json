@@ -8,10 +8,17 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/native": "^5.1.6",
+    "@react-navigation/stack": "^5.2.13",
     "firebase": "^7.14.2",
     "react": "16.8.6",
     "react-native": "0.60.6",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.6.0",
     "react-navigation": "^4.3.8",
+    "react-navigation-stack": "^2.3.13",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0"
