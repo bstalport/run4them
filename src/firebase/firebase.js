@@ -1,7 +1,15 @@
 import * as firebase from 'firebase';
+import { GoogleSignin } from '@react-native-community/google-signin';
 
 class Fbase {
 
+  static configureGoogleAuth(){
+    GoogleSignin.configure({
+      webClientId: '456194470833-9qhm3rjc43eq1647p4hvcd5hd32luggp.apps.googleusercontent.com', // From Firebase Console Settings
+    }); 
+  }
+  
+  
   
   /**
    * Initialises Firebase

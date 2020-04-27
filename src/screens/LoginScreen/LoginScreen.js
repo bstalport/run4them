@@ -28,10 +28,7 @@ const styles = StyleSheet.create({
   }
 });
 
-GoogleSignin.configure({
-  webClientId: '456194470833-9qhm3rjc43eq1647p4hvcd5hd32luggp.apps.googleusercontent.com', // From Firebase Console Settings
-}); 
-
+Fbase.configureGoogleAuth();
 class LoginScreen extends PureComponent {
   
   constructor(props) {
