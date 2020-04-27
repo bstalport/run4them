@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React  from 'react';
 import { Navigation } from 'react-native-navigation';
 
 import {
@@ -21,29 +21,30 @@ import {
 } from './Screens';
 
 
+function WrappedComponent(Component) {
+  return function inject(props) {
+    const EnhancedComponent = () => (
+      <Provider>
+        <Component
+          {...props}
+        />
+      </Provider>
+    );
+
+    return <EnhancedComponent />;
+  };
+}
+
+
 
 export default function () {
-  console.log("Start Wrap"+WELCOME_SCREEN);
+  console.log("Start Wrap"+WrappedComponent(WelcomeScreen));
 
-  function WrappedComponent(Component) {
-    console.log("Wrapped it");
-     function inject(props) {
-      const EnhancedComponent = () => (
-        <Provider>
-          <Component
-            {...props}
-          />
-        </Provider>
-      );
   
-      return <EnhancedComponent />;
-    };
-  }
-
-  Navigation.registerComponent(WELCOME_SCREEN, () => WelcomeScreen);
-  Navigation.registerComponent(LOGIN_SCREEN, () => LoginScreen);
-  Navigation.registerComponent(SINGLE_APP_SCREEN, () => SingleAppScreen);
-  Navigation.registerComponent(TAB1_SCREEN, () => Tab1Screen);
-  Navigation.registerComponent(TAB2_SCREEN, () => Tab2Screen);
+  Navigation.registerComponent(WELCOME_SCREEN, () => WrappedComponent(WelcomeScreen));
+  Navigation.registerComponent(LOGIN_SCREEN, () => WrappedComponent(LoginScreen));
+  Navigation.registerComponent(SINGLE_APP_SCREEN, () => WrappedComponent(SingleAppScreen));
+  Navigation.registerComponent(TAB1_SCREEN, () => WrappedComponent(Tab1Screen));
+  Navigation.registerComponent(TAB2_SCREEN, () => WrappedComponent(Tab2Screen));
   console.info('All screens have been registered...');
 }

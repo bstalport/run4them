@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
   }
 });
 
+GoogleSignin.configure({
+  webClientId: '456194470833-9qhm3rjc43eq1647p4hvcd5hd32luggp.apps.googleusercontent.com', // From Firebase Console Settings
+}); 
+
 class LoginScreen extends PureComponent {
   
   constructor(props) {
@@ -41,6 +45,10 @@ class LoginScreen extends PureComponent {
 
     Fbase.initialize();
   }
+
+
+
+
 
   async loginWithGoogle() {
     // Get the users ID token
@@ -83,7 +91,7 @@ class LoginScreen extends PureComponent {
     return (
       <View style={styles.flex}>
         <Button title="Log Google"
-          onPress={this.loginWithGoogle}
+          onPress={() => this.loginWithGoogle().then(() => pushSingleScreenApp())}
         >
           Login with Google
         </Button>
@@ -97,5 +105,5 @@ class LoginScreen extends PureComponent {
   screenType: PropTypes.oneOf(['Single', 'Tab']).isRequired
 };*/
 
-//export default connectData()(LoginScreen);
-export default LoginScreen;
+export default connectData()(LoginScreen);
+//export default LoginScreen;

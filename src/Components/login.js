@@ -20,11 +20,17 @@ import {Sae} from 'react-native-textinput-effects';
 //import DismissKeyboard from "dismissKeyboard";
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-community/google-signin';
-/* GoogleSignin.configure({
-    webClientId: '456194470833-9peptaqutg6cm1k4urdlv1cjdr98r3mv.apps.googleusercontent.com', // From Firebase Console Settings
-  }); */
+
+GoogleSignin.configure({
+    webClientId: '456194470833-9qhm3rjc43eq1647p4hvcd5hd32luggp.apps.googleusercontent.com', // From Firebase Console Settings
+  }); 
 
 import CommonStyle from '../styles/common.css';
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    alert('Logged with Google');
+  }
 
 class Login extends Component {
   constructor(props) {
