@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 class WelcomeScreen extends PureComponent {
 
   handleGetStartAction = (screenType) => {
-    Navigation.push(this.props.componentId, {
+  /*  Navigation.push(this.props.componentId, {
       component: {
         name: LOGIN_SCREEN,
         passProps: {
@@ -58,7 +58,7 @@ class WelcomeScreen extends PureComponent {
           }
         }
       }
-    });
+    });*/
   };
 
   render() {
