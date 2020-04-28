@@ -16,6 +16,7 @@ import { pushSingleScreenApp, pushTabBasedApp } from 'src/navigation';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import Fbase from "src/firebase/firebase";
+import { pushHomeScreen } from 'src/navigation';
 
 const styles = StyleSheet.create({
   flex: {
@@ -88,7 +89,7 @@ class LoginScreen extends PureComponent {
     return (
       <View style={styles.flex}>
         <Button title="Log Google"
-          onPress={() => this.loginWithGoogle().then(() => pushSingleScreenApp())}
+          onPress={() => this.loginWithGoogle().then(() => pushHomeScreen())}
         >
           Login with Google
         </Button>
