@@ -101,13 +101,13 @@ export function pushHomeScreen() {
                         title: {
                           text: 'Profile Screen',
                         },
-                        leftButtons: [
+                        /*leftButtons: [
                           {
                             id: 'nav_user_btn',
                             icon: require('assets/icons/ic_nav_user.png'),
                             color: 'white',
                           },
-                        ],
+                        ],*/
                         rightButtons: [
                           {
                             id: 'nav_logout_btn',
@@ -122,7 +122,7 @@ export function pushHomeScreen() {
               ],
               options: {
                 bottomTab: {
-                  icon: require('assets/icons/ic_tab_home.png'),
+                  icon: require('assets/icons/ic_nav_user.png'),
                   testID: 'PROFILE_SCREEN',
                   text: 'Profile Screen',
                 },
@@ -140,13 +140,13 @@ export function pushHomeScreen() {
                         title: {
                           text: 'NEW_RACE_SCREEN',
                         },
-                        leftButtons: [
+                        /*leftButtons: [
                           {
                             id: 'nav_user_btn',
                             icon: require('assets/icons/ic_nav_user.png'),
                             color: 'white',
                           },
-                        ],
+                        ],*/
                         rightButtons: [
                           {
                             id: 'nav_logout_btn',
@@ -161,9 +161,9 @@ export function pushHomeScreen() {
               ],
               options: {
                 bottomTab: {
-                  icon: require('assets/icons/ic_tab_menu.png'),
+                  icon: require('assets/icons/add.png'),
                   testID: 'NEW_RACE_SCREEN',
-                  text: 'New Race',
+                  text: '',
                 },
               },
             },
@@ -179,13 +179,13 @@ export function pushHomeScreen() {
                         title: {
                           text: 'History Screen',
                         },
-                        leftButtons: [
+                        /*leftButtons: [
                           {
                             id: 'nav_user_btn',
                             icon: require('assets/icons/ic_nav_user.png'),
                             color: 'white',
                           },
-                        ],
+                        ],*/
                         rightButtons: [
                           {
                             id: 'nav_logout_btn',
