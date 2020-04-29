@@ -1,30 +1,24 @@
 import * as firebase from 'firebase';
-import { GoogleSignin } from '@react-native-community/google-signin';
+/*import {GoogleSignin} from '@react-native-community/google-signin';
+import auth from '@react-native-firebase/auth';*/
+import Config from 'src/config/config';
 
 class Fbase {
 
-  static configureGoogleAuth(){
-    GoogleSignin.configure({
-      webClientId: '', // From Firebase Console Settings
-    }); 
-  }
-  
-  
-  
   /**
    * Initialises Firebase
    */
   static initialize() {
     try {
       return firebase.initializeApp({
-        apiKey: 'AIzaSyCLGdh96dQwTwT84hOA3dMrioFcTNr_JiY',
-        authDomain: 'run4them-1b0cf.firebaseapp.com',
-        databaseURL: 'https://run4them-1b0cf.firebaseio.com',
-        projectId: 'run4them-1b0cf',
-        storageBucket: 'run4them-1b0cf.appspot.com',
-        messagingSenderId: '456194470833',
-        appId: '1:456194470833:web:e3154985546f0d79524390',
-        measurementId: 'G-QY59XJ3V57',
+        apiKey: Config.FireBaseApiKey,
+        authDomain: Config.FireBaseAuthDomain,
+        databaseURL: Config.FireBaseDatabaseURL,
+        projectId: Config.FireBaseProjectId,
+        storageBucket: Config.FireBaseStorageBucket,
+        messagingSenderId: Config.FireBaseMessagingSenderId,
+        appId: Config.FireBaseAppId,
+        measurementId: Config.FireBaseMeasurementId,
       });
     } catch (err) {
       // we skip the "already exists" message which is
@@ -33,9 +27,7 @@ class Fbase {
         console.error('Firebase initialization error', err.stack);
       }
     }
-    
   }
 }
 
 module.exports = Fbase;
-//export default Fbase;

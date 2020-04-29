@@ -3,7 +3,6 @@
 import React  from 'react';
 import { Navigation } from 'react-native-navigation';
 import {
-  WelcomeScreen,
   LoginScreen,
   SignupScreen,
   ProfileScreen,
@@ -38,7 +37,6 @@ function WrappedComponent(Component) {
 }
 
 export default function () {
-  Navigation.registerComponent(WELCOME_SCREEN, () => WrappedComponent(WelcomeScreen));
   Navigation.registerComponent(LOGIN_SCREEN, () => WrappedComponent(LoginScreen));
   Navigation.registerComponent(SIGN_UP_SCREEN, () => WrappedComponent(SignupScreen));
   Navigation.registerComponent(PROFILE_SCREEN, () => WrappedComponent(ProfileScreen));

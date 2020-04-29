@@ -27,6 +27,7 @@ target 'run4them' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
 
   # add the Firebase pod for Google Analytics
   pod 'Firebase/Analytics'
