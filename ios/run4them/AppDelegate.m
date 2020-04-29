@@ -10,6 +10,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 
 @implementation AppDelegate
@@ -19,6 +20,7 @@
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
+  [GMSServices provideAPIKey:@"AIzaSyCLGdh96dQwTwT84hOA3dMrioFcTNr_JiY"];
   [ReactNativeNavigation bootstrapWithDelegate:self launchOptions:launchOptions];
   [self.window makeKeyAndVisible];
   return YES;
