@@ -3,10 +3,6 @@
 import {Navigation} from 'react-native-navigation';
 
 import {
-  WELCOME_SCREEN,
-  SINGLE_APP_SCREEN,
-  TAB1_SCREEN,
-  TAB2_SCREEN,
   LOGIN_SCREEN,
   SIGN_UP_SCREEN,
   PROFILE_SCREEN,
@@ -14,11 +10,18 @@ import {
   RACE_HISTORY_SCREEN,
 } from './Screens';
 import registerScreens from './registerScreens';
+import Authentication from 'src/firebase/authentication';
 
 // Register all screens on launch
 registerScreens();
 
-export function pushLoginScreen() {
+Navigation.events().registerNavigationButtonPressedListener(({buttonId}) => {
+  if (buttonId === 'nav_logout_btn') {
+    Authentication.logout(() => {});
+  }
+});
+
+function setDefault() {
   Navigation.setDefaultOptions({
     topBar: {
       background: {
@@ -49,7 +52,18 @@ export function pushLoginScreen() {
       selectedIconColor: 'black',
     },
   });
+}
 
+export function goToComponent(componentIdFrom, componentIdTo) {
+  Navigation.push(componentIdFrom, {
+    component: {
+      name: componentIdTo,
+    },
+  });
+}
+
+export function pushLoginScreen() {
+  setDefault();
   Navigation.setRoot({
     root: {
       stack: {
@@ -70,8 +84,8 @@ export function pushLoginScreen() {
   });
 }
 
-
 export function pushHomeScreen() {
+  setDefault();
   Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -198,43 +212,3 @@ export function pushHomeScreen() {
     },
   });
 }
-
-
-/*
-export function pushSingleScreenApp() {
-  Navigation.setRoot({
-    root: {
-      stack: {
-        children: [
-          {
-            component: {
-              name: SINGLE_APP_SCREEN,
-              options: {
-                topBar: {
-                  title: {
-                    text: 'SINGLE SCREEN APP',
-                  },
-                  leftButtons: [
-                    {
-                      id: 'nav_user_btn',
-                      icon: require('assets/icons/ic_nav_user.png'),
-                      color: 'white',
-                    },
-                  ],
-                  rightButtons: [
-                    {
-                      id: 'nav_logout_btn',
-                      icon: require('assets/icons/ic_nav_logout.png'),
-                      color: 'white',
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        ],
-      },
-    },
-  });
-}
-*/
