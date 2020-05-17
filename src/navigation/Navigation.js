@@ -8,6 +8,7 @@ import {
   PROFILE_SCREEN,
   NEW_RACE_SCREEN,
   RACE_HISTORY_SCREEN,
+  INFO_SCREEN,
 } from './Screens';
 import registerScreens from './registerScreens';
 import Authentication from 'src/firebase/authentication';
@@ -203,6 +204,39 @@ export function pushHomeScreen() {
                   icon: require('assets/icons/ic_tab_home.png'),
                   testID: 'RACE_HISTORY_SCREEN',
                   text: 'History Screen',
+                },
+              },
+            },
+          },
+
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: INFO_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Info Screen',
+                        },
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  icon: require('assets/icons/ic_tab_home.png'),
+                  testID: 'INFO_SCREEN',
+                  text: 'Info Screen',
                 },
               },
             },

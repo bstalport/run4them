@@ -7,6 +7,9 @@ import {StyleSheet, View, Button, Text} from 'react-native';
 import {connectData} from 'src/redux';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import MapView, {Polyline, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import Authentication from 'src/firebase/authentication';
+import Database from 'src/firebase/database';
+import {TextInput} from 'react-native-gesture-handler';
 
 class NewRaceScreen extends PureComponent {
   constructor(props) {
@@ -18,10 +21,21 @@ class NewRaceScreen extends PureComponent {
         longitude: 5.578397,
       },
       markers: [],
+      fbAuthTokem: '',
+      raceId: '',
+      response: '',
     };
 
     this.stopCourse = this.stopCourse.bind(this);
     this.showMap = this.showMap.bind(this);
+    this.startCourse = this.startCourse.bind(this);
+
+    Authentication.getFireBaseAuthId((idToken) => {
+      this.setState({
+        fbAuthTokem: idToken.token,
+      });
+      console.info(this.state.fbAuthTokem);
+    });
   }
 
   componentDidMount() {
@@ -40,15 +54,26 @@ class NewRaceScreen extends PureComponent {
       activitiesInterval: 5000,
       stopOnStillActivity: false,
       activityType: 'fitness',
-      url: 'http://192.168.81.15:3000/location',
+      url:
+        'https://firestore.googleapis.com/v1/projects/run4them-1b0cf/databases/(default)/documents/Races/' +
+        this.state.raceId +
+        '/Runway',
+      syncUrl: 'http://stalportcontemporain.be/testSap.php',
       httpHeaders: {
-        'X-FOO': 'bar',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.state.fbAuthTokem,
       },
       // customize post properties
       postTemplate: {
-        lat: '@latitude',
-        lon: '@longitude',
-        foo: 'bar', // you can also add your own properties
+        fields: {
+          pos: {
+            geoPointValue: {
+              latitude: '@latitude',
+              longitude: '@longitude',
+            },
+          },
+        },
       },
     });
 
@@ -56,6 +81,7 @@ class NewRaceScreen extends PureComponent {
       // handle your locations here
       // to perform long running operation on iOS
       // you need to create background task
+
       BackgroundGeolocation.startTask((taskKey) => {
         // execute long running task
         // eg. ajax post location
@@ -165,19 +191,70 @@ class NewRaceScreen extends PureComponent {
   }
 
   startCourse() {
-    BackgroundGeolocation.checkStatus((status) => {
+    const currentUser = Authentication.getCurrentUser();
+    Database.createNewRace(
+      currentUser,
+      (docRef) => {
+        this.setState({raceId: docRef.id});
+        BackgroundGeolocation.checkStatus((status) => {
+          BackgroundGeolocation.deleteAllLocations();
+          if (!status.isRunning) {
+            BackgroundGeolocation.start(); //triggers start on start event
+          }
+        });
+
+        /*BackgroundGeolocation.configure({
+          url:
+            'https://firestore.googleapis.com/v1/projects/run4them-1b0cf/databases/(default)/documents/Races/' +
+            this.state.raceId +
+            '/Runway',
+          syncUrl: 'http://stalportcontemporain.be/testSap.php',
+          httpHeaders: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + this.state.fbAuthTokem,
+          },
+          // customize post properties
+          postTemplate: {
+            fields: {
+              pos: {
+                geoPointValue: {
+                  latitude: '@latitude',
+                  longitude: '@longitude',
+                },
+              },
+            },
+          },
+        },()=>{
+          
+        });
+
+        BackgroundGeolocation.getConfig(function(config) {
+          console.log(config);
+        });*/
+        
+      },
+      (error) => {
+        this.setState({
+          response: error.toString(),
+        });
+      },
+    );
+    /*BackgroundGeolocation.checkStatus((status) => {
+      BackgroundGeolocation.deleteAllLocations();
       if (!status.isRunning) {
         BackgroundGeolocation.start(); //triggers start on start event
       }
-    });
+    });*/
   }
 
   stopCourse() {
     BackgroundGeolocation.stop();
-    BackgroundGeolocation.getLocations((locations) => {
+    BackgroundGeolocation.getValidLocations((locations) => {
       this.showMap(locations);
       console.log(locations);
     });
+    BackgroundGeolocation.forceSync();
   }
 
   showMap(locations) {
@@ -210,8 +287,11 @@ class NewRaceScreen extends PureComponent {
           },
         ],
       });
-      this.mapRef.fitToCoordinates([this.state.markers[0].coordinate,this.state.markers[1].coordinate]);
-     /* this.mapRef.fitToSuppliedMarkers(['mk1', 'mk2'], {
+      this.mapRef.fitToCoordinates([
+        this.state.markers[0].coordinate,
+        this.state.markers[1].coordinate,
+      ]);
+      /* this.mapRef.fitToSuppliedMarkers(['mk1', 'mk2'], {
         edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
       });*/
     }
@@ -221,6 +301,7 @@ class NewRaceScreen extends PureComponent {
     return (
       <View>
         <Text>New race screen</Text>
+
         <Button title="start" onPress={() => this.startCourse()}>
           Commencer une course
         </Button>

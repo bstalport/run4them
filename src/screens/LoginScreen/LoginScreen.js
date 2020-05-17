@@ -33,38 +33,62 @@ class LoginScreen extends PureComponent {
       response: '',
     };
 
+    this.login = this.login.bind(this);
+    this.loginWithGoogle = this.loginWithGoogle.bind(this);
+    this.loginWithFaceBook = this.loginWithFaceBook.bind(this);
+
   }
 
   loginWithGoogle() {
-    Authentication.loginWithGoogle( 
-      (user) =>{
-      this.setState({
-        response: 'Logged In!',
-      });
-    },(error) =>{
-      this.setState({
-        response: error.toString(),
-      });
-    });
+    Authentication.loginWithGoogle(
+      (user) => {
+        this.setState({
+          response: 'Logged In!',
+        });
+      },
+      (error) => {
+        this.setState({
+          response: error.toString(),
+        });
+      },
+    );
+  }
 
+  loginWithFaceBook() {
+    Authentication.loginWithFaceBook(
+      (user) => {
+        this.setState({
+          response: 'Logged In!',
+        });
+      },
+      (error) => {
+        this.setState({
+          response: error.toString(),
+        });
+      },
+    );
   }
 
   login() {
     //DismissKeyboard();
-    Authentication.login(this.state.email, this.state.password, 
-      () =>{
+    Authentication.login(
+      this.state.email,
+      this.state.password,
+      () => {
         this.setState({
           response: 'Logged In!',
         });
-      },(error) =>{
+      },
+      (error) => {
         this.setState({
           response: error.toString(),
         });
-      });
+      },
+    );
   }
 
   goToSignUp() {
-    goToComponent(this.props.componentId,SIGN_UP_SCREEN);
+    goToComponent(this.props.componentId, SIGN_UP_SCREEN);
   }
 
   render() {
@@ -73,7 +97,7 @@ class LoginScreen extends PureComponent {
         <Text>{this.state.response}</Text>
         <Fumi
           style={styles.button}
-          inputStyle={{ color: '#db786d' }}
+          inputStyle={{color: '#db786d'}}
           label={'Email Address'}
           iconClass={FontAwesomeIcon}
           iconName={'pencil'}
@@ -84,7 +108,7 @@ class LoginScreen extends PureComponent {
         />
         <Fumi
           style={styles.button}
-          inputStyle={{ color: '#db786d' }}
+          inputStyle={{color: '#db786d'}}
           label={'Password'}
           iconClass={FontAwesomeIcon}
           iconName={'key'}
@@ -98,6 +122,11 @@ class LoginScreen extends PureComponent {
         </Button>
         <Button title="Log Google" onPress={() => this.loginWithGoogle()}>
           Login avec Google
+        </Button>
+        <Button
+          title="Facebook Sign-In"
+          onPress={() => this.loginWithFaceBook()}>
+          Login avec Facebook
         </Button>
         <Button title="Log Google" onPress={() => this.goToSignUp()}>
           Pas de compte?
