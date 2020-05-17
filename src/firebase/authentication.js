@@ -3,8 +3,10 @@
  */
 
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
 import Config from 'src/config/config';
+import Database from 'src/firebase/database';
 
 class Authentication {
   static init() {
@@ -23,19 +25,40 @@ class Authentication {
   static login(email, pwd, fnSuccess, fnError) {
     auth()
       .signInWithEmailAndPassword(email, pwd)
-      .then(() => {
-        fnSuccess();
+      .then((resp) => {
+        Database.createUserProfile(
+          resp.user.uid,
+          false,
+          {
+            latitude: 50.64716,
+            longitude: 5.578397,
+          },
+          false,
+          () => {
+            fnSuccess(resp);
+          },
+          (error) => {
+            fnError(error);
+          },
+        );
       })
       .catch((error) => {
         fnError(error);
       });
   }
 
-  static getCurrentUser(){
+  static getCurrentUser() {
     return auth().currentUser;
   }
 
-  static async updateProfile(name, picUrl){
+  static getFireBaseAuthId(fnSuccess, fnError) {
+    auth()
+      .currentUser.getIdTokenResult()
+      .then((idToken) => fnSuccess(idToken))
+      .catch((error) => fnError(error));
+  }
+
+  static async updateProfile(name, picUrl) {
     const update = {
       displayName: name,
       photoURL: picUrl,
@@ -44,23 +67,61 @@ class Authentication {
   }
 
   static async loginWithGoogle(fnSuccess, fnError) {
-    // Get the users ID token
     await GoogleSignin.hasPlayServices();
     const user = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(user.idToken);
 
-    // Sign-in the user with the credential
     return auth()
       .signInWithCredential(googleCredential)
-      .then(() => {
-        updateProfile(user.user.name, user.user.photo);
-        fnSuccess(user);
+      .then((resp) => {
+        Authentication.updateProfile(user.user.name, user.user.photo);
+        Database.createUserProfile(
+          resp.user.uid,
+          false,
+          {
+            latitude: 50.64716,
+            longitude: 5.578397,
+          },
+          false,
+          () => {
+            fnSuccess(user)
+          },
+          (error) => {
+            fnError(error);
+          },
+        );
+        
       })
       .catch((error) => {
         fnError(error);
       });
+  }
+
+  static async loginWithFaceBook() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
   }
 
   static signup(email, pwd, fnSuccess, fnError) {

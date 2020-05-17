@@ -3,6 +3,7 @@
 import React  from 'react';
 import { Navigation } from 'react-native-navigation';
 import {
+  InfoScreen,
   LoginScreen,
   SignupScreen,
   ProfileScreen,
@@ -13,7 +14,7 @@ import {
 import { Provider } from 'src/redux';
 
 import {
-  WELCOME_SCREEN,
+  INFO_SCREEN,
   LOGIN_SCREEN,
   SIGN_UP_SCREEN,
   PROFILE_SCREEN,
@@ -42,5 +43,6 @@ export default function () {
   Navigation.registerComponent(PROFILE_SCREEN, () => WrappedComponent(ProfileScreen));
   Navigation.registerComponent(NEW_RACE_SCREEN, () => WrappedComponent(NewRaceScreen));
   Navigation.registerComponent(RACE_HISTORY_SCREEN, () => WrappedComponent(RaceHistoryScreen));
+  Navigation.registerComponent(INFO_SCREEN, () => WrappedComponent(InfoScreen));
   console.info('All screens have been registered...');
 }

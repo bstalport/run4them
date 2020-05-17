@@ -13,12 +13,12 @@ Icon.loadFont();
 Authentication.init();
 Fbase.initialize();
 
-/* Navigation.events().registerAppLaunchedListener(() => {
-  pushLoginScreen()
+ Navigation.events().registerAppLaunchedListener(() => {
+  auth().onAuthStateChanged(onAuthStateChanged);
 });
-*/
 
-auth().onAuthStateChanged(onAuthStateChanged);
+
+
 
 function onAuthStateChanged(user) {
   if (user) {

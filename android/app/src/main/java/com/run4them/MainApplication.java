@@ -46,6 +46,6 @@ public class MainApplication extends NavigationApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    
+    BackgroundTaskPackage.useContext(this);
   }
 }

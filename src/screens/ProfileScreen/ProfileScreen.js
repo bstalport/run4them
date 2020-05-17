@@ -12,26 +12,56 @@ import auth from '@react-native-firebase/auth';
 class ProfileScreen extends PureComponent {
   constructor(props) {
     super(props);
-
-    const user = Authentication.getCurrentUser();
     this.state = {
-      userId: user.uid,
-      email: user.email,
-      name: user.displayName,
-      photoURL: user.photoURL,
-    };
+      profileLoaded : false
+    }
+
+    this.getData = this.getData.bind(this);
+
+    this.getData();
 
     auth().onUserChanged(() => {
-      const user = Authentication.getCurrentUser();
-      if (user) {
-        this.state = {
-          userId: user.uid,
-          email: user.email,
-          name: user.displayName,
-          photoURL: user.photoURL,
-        };
-      }
+      this.getData();
     });
+    
+  }
+
+  getData() {
+    const user = Authentication.getCurrentUser();
+    if (user && !this.state.profileLoaded) {
+      this.state = {
+        userId: user.uid,
+        email: user.email,
+        name: user.displayName,
+        photoURL: user.photoURL,
+        hasAcceptedUserPublication: null,
+        lastPosition: {
+          latitude: 0,
+          longitude: 0,
+        },
+        hasSeenTutorial: null,
+        profileLoaded : false,
+      };
+
+      Database.getUserProfile(
+        user.uid,
+        (resp,_this) => {
+          _this.state = {
+            ..._this.state,
+            hasAcceptedUserPublication: resp.hasAcceptedUserPublication,
+            lastPosition: {
+              latitude: resp.lastPosition._latitude,
+              longitude: resp.lastPosition._longitude,
+            },
+            hasSeenTutorial: resp.hasSeenTutorial,
+            profileLoaded : true
+          };
+        },
+        (error) => {
+          console.log(error);
+        },this
+      );
+    }
   }
 
   render() {
@@ -48,6 +78,11 @@ class ProfileScreen extends PureComponent {
         <Text>Photo Url in Firestore :{this.state.photoURL}</Text>
         <Text>Email in Firestore :{this.state.email}</Text>
         <Text>Name in Firestore :{this.state.name}</Text>
+        <Text>
+          hasAcceptedUserPublication :{this.state.hasAcceptedUserPublication}
+        </Text>
+        <Text>lastPosition :{this.state.lastPosition.latitude}, {this.state.lastPosition.longitude}</Text>
+        <Text>hasSeenTutorial :{this.state.hasSeenTutorial}</Text>
       </View>
     );
   }
@@ -60,6 +95,6 @@ const styles = StyleSheet.create({
   },
   photo: {
     width: 200,
-    height:200
+    height: 200,
   },
 });
