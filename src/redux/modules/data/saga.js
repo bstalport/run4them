@@ -1,6 +1,8 @@
 // @flow
-
+import { authorize } from 'react-native-app-auth';
 import { App_Service } from 'src/services';
+
+//import { Strava } from 'strava';
 
 import {
   take,
@@ -12,7 +14,8 @@ import {
 
 import {
   GET_FACEBOOK_DATA,
-  fetchDataActionCreators
+  GET_STRAVA_ACTIVITIES,
+  fetchDataActionCreators,
 } from './actions';
 
 export function* asyncGetFacebookUserData({ payload }) {
@@ -40,8 +43,34 @@ export function* watchGetFacebookUserData() {
   }
 }
 
+
+export function* asyncGetStravaActivitiesData({ payload }) {
+  const stravaToken = payload.stravaAccessToken;
+  const url = `https://www.strava.com/api/v3/athlete/activities`;
+
+  try {
+    const response = yield call(App_Service, { url, method: 'GET', BearerToken: stravaToken});
+    if (response.result === 'ok') {
+      yield put(fetchDataActionCreators.setStravaActivities({stravaActivities:response.data}));
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+}
+
+export function* watchGetStravaActivitiesData() {
+  while (true) {
+    const action = yield take(GET_STRAVA_ACTIVITIES);
+    yield* asyncGetStravaActivitiesData(action);
+  }
+}
+
+
+
 export default function* () {
   yield all([
     fork(watchGetFacebookUserData),
+    fork(watchGetStravaActivitiesData),
   ]);
 }

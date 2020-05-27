@@ -7,8 +7,12 @@ import {
   LoginScreen,
   SignupScreen,
   ProfileScreen,
-  NewRaceScreen,
-  RaceHistoryScreen
+  NewActivityScreen,
+  ActivityHistoryScreen,
+  SelectSponsorScreen,
+  ActivityValidatedScreen,
+  AdSponsorScreen,
+  HomeScreen,
 } from 'src/screens';
 
 import { Provider } from 'src/redux';
@@ -18,8 +22,12 @@ import {
   LOGIN_SCREEN,
   SIGN_UP_SCREEN,
   PROFILE_SCREEN,
-  NEW_RACE_SCREEN,
-  RACE_HISTORY_SCREEN
+  NEW_ACTIVITY_SCREEN,
+  ACTIVITY_HISTORY_SCREEN,
+  SELECT_SPONSOR_SCREEN,
+  ACTIVITY_VALIDATED_SCREEN,
+  AD_SPONSOR_SCREEN,
+  HOME_SCREEN,
 } from './Screens';
 
 
@@ -41,8 +49,12 @@ export default function () {
   Navigation.registerComponent(LOGIN_SCREEN, () => WrappedComponent(LoginScreen));
   Navigation.registerComponent(SIGN_UP_SCREEN, () => WrappedComponent(SignupScreen));
   Navigation.registerComponent(PROFILE_SCREEN, () => WrappedComponent(ProfileScreen));
-  Navigation.registerComponent(NEW_RACE_SCREEN, () => WrappedComponent(NewRaceScreen));
-  Navigation.registerComponent(RACE_HISTORY_SCREEN, () => WrappedComponent(RaceHistoryScreen));
+  Navigation.registerComponent(NEW_ACTIVITY_SCREEN, () => WrappedComponent(NewActivityScreen));
+  Navigation.registerComponent(ACTIVITY_HISTORY_SCREEN, () => WrappedComponent(ActivityHistoryScreen));
   Navigation.registerComponent(INFO_SCREEN, () => WrappedComponent(InfoScreen));
+  Navigation.registerComponent(SELECT_SPONSOR_SCREEN, () => WrappedComponent(SelectSponsorScreen));
+  Navigation.registerComponent(ACTIVITY_VALIDATED_SCREEN, () => WrappedComponent(ActivityValidatedScreen));
+  Navigation.registerComponent(AD_SPONSOR_SCREEN, () => WrappedComponent(AdSponsorScreen));
+  Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(HomeScreen));
   console.info('All screens have been registered...');
 }

@@ -6,9 +6,13 @@ import {
   LOGIN_SCREEN,
   SIGN_UP_SCREEN,
   PROFILE_SCREEN,
-  NEW_RACE_SCREEN,
-  RACE_HISTORY_SCREEN,
+  NEW_ACTIVITY_SCREEN,
+  ACTIVITY_HISTORY_SCREEN,
   INFO_SCREEN,
+  SELECT_SPONSOR_SCREEN,
+  ACTIVITY_VALIDATED_SCREEN,
+  AD_SPONSOR_SCREEN,
+  HOME_SCREEN,
 } from './Screens';
 import registerScreens from './registerScreens';
 import Authentication from 'src/firebase/authentication';
@@ -17,8 +21,14 @@ import Authentication from 'src/firebase/authentication';
 registerScreens();
 
 Navigation.events().registerNavigationButtonPressedListener(({buttonId}) => {
-  if (buttonId === 'nav_logout_btn') {
-    Authentication.logout(() => {});
+  switch (buttonId) {
+    case 'nav_logout_btn': {
+      Authentication.logout(() => {});
+    }
+    case 'nav_home_btn': {
+      pushHomeScreen();
+    }
+    
   }
 });
 
@@ -85,6 +95,37 @@ export function pushLoginScreen() {
   });
 }
 
+export function pushProfileScreen() {
+  setDefault();
+  Navigation.setRoot({
+    root: {
+      stack: {
+        children: [
+          {
+            component: {
+              name: PROFILE_SCREEN,
+              options: {
+                topBar: {
+                  title: {
+                    text: 'Mon Profil',
+                  },
+                  rightButtons: [
+                    {
+                      id: 'nav_logout_btn',
+                      icon: require('assets/icons/ic_nav_logout.png'),
+                      color: 'white',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
+}
+
 export function pushHomeScreen() {
   setDefault();
   Navigation.setRoot({
@@ -94,21 +135,22 @@ export function pushHomeScreen() {
           {
             stack: {
               children: [
+                
                 {
                   component: {
-                    name: PROFILE_SCREEN,
+                    name: HOME_SCREEN,
                     options: {
                       topBar: {
                         title: {
-                          text: 'Profile Screen',
+                          text: 'Home',
                         },
-                        /*leftButtons: [
+                        leftButtons: [
                           {
                             id: 'nav_user_btn',
                             icon: require('assets/icons/ic_nav_user.png'),
                             color: 'white',
                           },
-                        ],*/
+                        ],
                         rightButtons: [
                           {
                             id: 'nav_logout_btn',
@@ -120,95 +162,118 @@ export function pushHomeScreen() {
                     },
                   },
                 },
-              ],
-              options: {
-                bottomTab: {
-                  icon: require('assets/icons/ic_nav_user.png'),
-                  testID: 'PROFILE_SCREEN',
-                  text: 'Profile Screen',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: NEW_RACE_SCREEN,
-                    options: {
-                      topBar: {
-                        title: {
-                          text: 'NEW_RACE_SCREEN',
-                        },
-                        /*leftButtons: [
-                          {
-                            id: 'nav_user_btn',
-                            icon: require('assets/icons/ic_nav_user.png'),
-                            color: 'white',
-                          },
-                        ],*/
-                        rightButtons: [
-                          {
-                            id: 'nav_logout_btn',
-                            icon: require('assets/icons/ic_nav_logout.png'),
-                            color: 'white',
-                          },
-                        ],
-                      },
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  icon: require('assets/icons/add.png'),
-                  testID: 'NEW_RACE_SCREEN',
-                  text: '',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: RACE_HISTORY_SCREEN,
-                    options: {
-                      topBar: {
-                        title: {
-                          text: 'History Screen',
-                        },
-                        /*leftButtons: [
-                          {
-                            id: 'nav_user_btn',
-                            icon: require('assets/icons/ic_nav_user.png'),
-                            color: 'white',
-                          },
-                        ],*/
-                        rightButtons: [
-                          {
-                            id: 'nav_logout_btn',
-                            icon: require('assets/icons/ic_nav_logout.png'),
-                            color: 'white',
-                          },
-                        ],
-                      },
-                    },
-                  },
-                },
+                
               ],
               options: {
                 bottomTab: {
                   icon: require('assets/icons/ic_tab_home.png'),
-                  testID: 'RACE_HISTORY_SCREEN',
-                  text: 'History Screen',
+                  testID: 'HOME_SCREEN',
+                  text: 'Home',
                 },
               },
             },
           },
-
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: ACTIVITY_VALIDATED_SCREEN,
+                    options: {
+                      topBar: {
+                        backButton: {
+                          visible: false
+                        },
+                        title: {
+                          text: 'Merci!',
+                        },
+                        
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+                {
+                  component: {
+                    name: AD_SPONSOR_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Merci!',
+                        },
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+                {
+                  component: {
+                    name: SELECT_SPONSOR_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Sélectionner sponsor',
+                        },
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+                {
+                  component: {
+                    name: NEW_ACTIVITY_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Enregistrer votre dernière activité',
+                        },
+                        leftButtons: [
+                          {
+                            id: 'nav_home_btn',
+                            icon: require('assets/icons/ic_nav_home.png'),
+                            color: 'white',
+                          },
+                        ],
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  icon: require('assets/icons/ic_tab_add.png'),
+                  testID: 'NEW_ACTIVITY_SCREEN',
+                  text: 'Ajouter',
+                },
+              },
+            },
+          },
+          
           {
             stack: {
               children: [
@@ -234,13 +299,55 @@ export function pushHomeScreen() {
               ],
               options: {
                 bottomTab: {
-                  icon: require('assets/icons/ic_tab_home.png'),
+                  icon: require('assets/icons/ic_tab_info.png'),
                   testID: 'INFO_SCREEN',
-                  text: 'Info Screen',
+                  text: 'Info',
                 },
               },
             },
           },
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: ACTIVITY_HISTORY_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Activity History',
+                        },
+                        leftButtons: [
+                          {
+                            id: 'nav_home_btn',
+                            icon: require('assets/icons/ic_nav_home.png'),
+                            color: 'white',
+                          },
+                        ],
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  icon: require('assets/icons/ic_tab_menu.png'),
+                  color: 'black',
+                  fontSize:'10px',
+                  testID: 'ACTIVITY_HISTORY_SCREEN',
+                  text: 'Activités',
+                },
+              },
+            },
+          },
+
         ],
       },
     },

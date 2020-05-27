@@ -11,6 +11,9 @@
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
+
 
 
 @implementation AppDelegate
@@ -20,6 +23,7 @@
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   [GMSServices provideAPIKey:@"AIzaSyCLGdh96dQwTwT84hOA3dMrioFcTNr_JiY"];
   [ReactNativeNavigation bootstrapWithDelegate:self launchOptions:launchOptions];
   [self.window makeKeyAndVisible];
@@ -34,5 +38,11 @@
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
+
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *) options {
+  return [self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url];
+}
+
 
 @end

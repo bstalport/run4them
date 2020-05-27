@@ -3,17 +3,26 @@
  */
 
 import firestore from '@react-native-firebase/firestore';
+import Authentication from 'src/firebase/authentication';
 
 class Database {
- 
-
-  static createUserProfile(userId, hasAcceptedUserPublication, lastPosition, hasSeenTutorial ,fnSuccess, fnError){
+  static createUserProfile(
+    userId,
+    hasAcceptedUserPublication,
+    lastPosition,
+    hasSeenTutorial,
+    fnSuccess,
+    fnError,
+  ) {
     firestore()
       .collection('Users')
       .doc(userId)
       .set({
         hasAcceptedUserPublication: hasAcceptedUserPublication,
-        lastPosition: new firestore.GeoPoint(lastPosition.latitude, lastPosition.longitude),
+        lastPosition: new firestore.GeoPoint(
+          lastPosition.latitude,
+          lastPosition.longitude,
+        ),
         hasSeenTutorial: hasSeenTutorial,
       })
       .then((DocReference) => {
@@ -24,56 +33,62 @@ class Database {
       });
   }
 
-  static getUserProfile(userId,fnSuccess, fnError, _this){
+  static getUserProfile(userId, fnSuccess, fnError, _this) {
     firestore()
-    .collection('Users')
-    .doc(userId)
-    .get()
-    .then((DocReference) => {
-      fnSuccess(DocReference.data(),_this);
-    })
-    .catch((error) => {
-      fnError(error);
-    });
+      .collection('Users')
+      .doc(userId)
+      .get()
+      .then((DocReference) => {
+        fnSuccess(DocReference.data(), _this);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
   }
 
-  static getSponsors(fnSuccess, fnError){
+  static getSponsors(fnSuccess, fnError) {
     firestore()
-    .collection('Sponsors')
-    .get()
-    .then((querySnapshot) => {
-      fnSuccess(querySnapshot);
-    })
-    .catch((error) => {
-      fnError(error);
-    });
+      .collection('Sponsors')
+      .get()
+      .then((querySnapshot) => {
+        let docs = [];
+        querySnapshot.docs.forEach((doc) => {
+          docs.push({
+            ...doc.data(),
+            sponsorId: doc.id,
+          });
+        });
+        fnSuccess(docs);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
   }
 
-  static getActivities(fnSuccess, fnError){
+  static getActivities(fnSuccess, fnError) {
+    //const user = Authentication.getCurrentUser();
     firestore()
-    .collection('Activities')
-    .get()
-    .then((querySnapshot) => {
-      fnSuccess(querySnapshot);
-    })
-    .catch((error) => {
-      fnError(error);
-    });
+      .collection('Activities')
+      //.where('userId','==', user.uid)
+      .get()
+      .then((querySnapshot) => {
+        fnSuccess(querySnapshot);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
   }
 
-  static createActivity(userId, sponsorId, starttime, endtime, source, distance, speed, creationTime ,fnSuccess, fnError){
+  static listenUserProfile(fnSuccess, fnError) {
+    firestore().collection('Activities').onSnapshot(fnSuccess, fnError);
+  }
+
+  static createActivity(data, fnSuccess, fnError) {
     firestore()
       .collection('Activities')
       .add({
-        userId: userId,
-        sponsorId: sponsorId,
-        startTime: starttime,
-        endTime:endtime,
-        source:source,
-        distance:distance,
-        speed:speed,
-        creationTime:creationTime,
-        status:'pending'
+        ...data,
+        creationTime: firestore.Timestamp.now(),
       })
       .then((DocReference) => {
         fnSuccess(DocReference);
@@ -83,8 +98,22 @@ class Database {
       });
   }
 
+  static createHealthKitUnregisteredActivitiy(data, fnSuccess, fnError) {
+    firestore()
+      .collection('healthKitUnregisteredActivities')
+      .add({
+        ...data,
+        creationTime: firestore.Timestamp.now(),
+      })
+      .then((DocReference) => {
+        fnSuccess(DocReference);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
+  }
 
-  static getCharities(fnSuccess, fnError){
+  /*static getCharities(fnSuccess, fnError){
     firestore()
     .collection('Charities')
     .get()
@@ -94,18 +123,18 @@ class Database {
     .catch((error) => {
       fnError(error);
     });
-  }
+  }*/
 
-  static getTotals(fnSuccess, fnError){
+  static getTotals(fnSuccess, fnError) {
     firestore()
-    .collection('Totals')
-    .get()
-    .then((querySnapshot) => {
-      fnSuccess(querySnapshot);
-    })
-    .catch((error) => {
-      fnError(error);
-    });
+      .collection('Totals')
+      .get()
+      .then((querySnapshot) => {
+        fnSuccess(querySnapshot);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
   }
 
   /*
