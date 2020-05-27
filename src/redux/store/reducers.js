@@ -1,7 +1,6 @@
 // @flow
 
 import { persistCombineReducers } from 'redux-persist';
-//mport storage from 'redux-persist/lib/storage';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {
