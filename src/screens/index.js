@@ -12,3 +12,4 @@ export { default as ProfileScreen } from './ProfileScreen/ProfileScreen';
 
 export { default as InfoScreen } from './InfoScreen/InfoScreen';
 export { default as HomeScreen } from './HomeScreen/HomeScreen';
+export { default as IntroScreen } from './IntroScreen/IntroScreen';

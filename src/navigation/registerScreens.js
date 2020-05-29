@@ -13,6 +13,7 @@ import {
   ActivityValidatedScreen,
   AdSponsorScreen,
   HomeScreen,
+  IntroScreen,
 } from 'src/screens';
 
 import { Provider } from 'src/redux';
@@ -28,6 +29,7 @@ import {
   ACTIVITY_VALIDATED_SCREEN,
   AD_SPONSOR_SCREEN,
   HOME_SCREEN,
+  INTRO_SCREEN,
 } from './Screens';
 
 
@@ -56,5 +58,6 @@ export default function () {
   Navigation.registerComponent(ACTIVITY_VALIDATED_SCREEN, () => WrappedComponent(ActivityValidatedScreen));
   Navigation.registerComponent(AD_SPONSOR_SCREEN, () => WrappedComponent(AdSponsorScreen));
   Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(HomeScreen));
+  Navigation.registerComponent(INTRO_SCREEN, () => WrappedComponent(IntroScreen));
   console.info('All screens have been registered...');
 }

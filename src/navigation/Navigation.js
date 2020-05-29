@@ -1,7 +1,7 @@
 // @flow
 
 import {Navigation} from 'react-native-navigation';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   LOGIN_SCREEN,
   SIGN_UP_SCREEN,
@@ -13,6 +13,7 @@ import {
   ACTIVITY_VALIDATED_SCREEN,
   AD_SPONSOR_SCREEN,
   HOME_SCREEN,
+  INTRO_SCREEN,
 } from './Screens';
 import registerScreens from './registerScreens';
 import Authentication from 'src/firebase/authentication';
@@ -28,7 +29,6 @@ Navigation.events().registerNavigationButtonPressedListener(({buttonId}) => {
     case 'nav_home_btn': {
       pushHomeScreen();
     }
-    
   }
 });
 
@@ -36,7 +36,7 @@ function setDefault() {
   Navigation.setDefaultOptions({
     topBar: {
       background: {
-        color: '#039893',
+        color: '#141a30',
       },
       title: {
         color: 'white',
@@ -48,7 +48,8 @@ function setDefault() {
       buttonColor: 'white',
     },
     statusBar: {
-      style: 'light',
+      backgroundColor: '#141a30',
+      style: 'light'
     },
     layout: {
       orientation: ['portrait'],
@@ -73,7 +74,30 @@ export function goToComponent(componentIdFrom, componentIdTo) {
   });
 }
 
+
 export function pushLoginScreen() {
+  
+
+  AsyncStorage.getItem('@run4them.didShowIntoAtFirstLoad', (err, result) => {
+    if (err) {
+    } else {
+      if (result == null) {
+        return Navigation.setRoot({
+          root: {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: INTRO_SCREEN,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      }
+    }
+  });
   setDefault();
   Navigation.setRoot({
     root: {
@@ -135,7 +159,6 @@ export function pushHomeScreen() {
           {
             stack: {
               children: [
-                
                 {
                   component: {
                     name: HOME_SCREEN,
@@ -162,7 +185,6 @@ export function pushHomeScreen() {
                     },
                   },
                 },
-                
               ],
               options: {
                 bottomTab: {
@@ -182,12 +204,12 @@ export function pushHomeScreen() {
                     options: {
                       topBar: {
                         backButton: {
-                          visible: false
+                          visible: false,
                         },
                         title: {
                           text: 'Merci!',
                         },
-                        
+
                         rightButtons: [
                           {
                             id: 'nav_logout_btn',
@@ -273,7 +295,7 @@ export function pushHomeScreen() {
               },
             },
           },
-          
+
           {
             stack: {
               children: [
@@ -340,14 +362,13 @@ export function pushHomeScreen() {
                 bottomTab: {
                   icon: require('assets/icons/ic_tab_menu.png'),
                   color: 'black',
-                  fontSize:'10px',
+                  fontSize: '10px',
                   testID: 'ACTIVITY_HISTORY_SCREEN',
                   text: 'Activités',
                 },
               },
             },
           },
-
         ],
       },
     },

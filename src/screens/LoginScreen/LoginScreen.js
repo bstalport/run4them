@@ -2,13 +2,14 @@
 
 import React, {PureComponent, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Image} from 'react-native';
 import {connectData} from 'src/redux';
 import {goToComponent, SIGN_UP_SCREEN} from 'src/navigation';
 import {Fumi} from 'react-native-textinput-effects';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Button from 'apsl-react-native-button';
 import Authentication from 'src/firebase/authentication';
+
 //import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 const styles = StyleSheet.create({
@@ -31,12 +32,12 @@ class LoginScreen extends PureComponent {
       email: '',
       password: '',
       response: '',
+      introVisible: false,
     };
 
     this.login = this.login.bind(this);
     this.loginWithGoogle = this.loginWithGoogle.bind(this);
     this.loginWithFaceBook = this.loginWithFaceBook.bind(this);
-
   }
 
   loginWithGoogle() {
@@ -135,10 +136,5 @@ class LoginScreen extends PureComponent {
     );
   }
 }
-
-/*LoginScreen.propTypes = {
-  getFacebookUserData: PropTypes.func.isRequired,
-  screenType: PropTypes.oneOf(['Single', 'Tab']).isRequired
-};*/
 
 export default connectData()(LoginScreen);
