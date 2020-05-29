@@ -58,3 +58,4 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 /src/config/config.js
+run4them.code-workspace

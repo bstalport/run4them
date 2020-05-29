@@ -67,9 +67,10 @@ class Database {
 
   static getActivities(fnSuccess, fnError) {
     //const user = Authentication.getCurrentUser();
+    let today = new Date();
     firestore()
       .collection('Activities')
-      //.where('userId','==', user.uid)
+      .where('creationTime','<=', today)
       .get()
       .then((querySnapshot) => {
         fnSuccess(querySnapshot);
