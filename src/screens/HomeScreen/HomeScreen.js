@@ -19,7 +19,21 @@ class HomeScreen extends PureComponent {
         case 'nav_user_btn': {
           Navigation.push(this.props.componentId, {
             component: {
-              name: PROFILE_SCREEN
+              name: PROFILE_SCREEN,
+              options: {
+                topBar: {
+                  title: {
+                    text: 'Mon Profil',
+                  },
+                  rightButtons: [
+                    {
+                      id: 'nav_logout_btn',
+                      icon: require('assets/icons/ic_nav_logout.png'),
+                      color: 'white',
+                    },
+                  ],
+                },
+              },
             }
           });
         }

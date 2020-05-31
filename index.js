@@ -5,11 +5,13 @@
 import {Navigation} from 'react-native-navigation';
 import {pushLoginScreen, pushHomeScreen} from 'src/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {default as MatIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
 import Authentication from 'src/firebase/authentication';
 import Fbase from 'src/firebase/firebase';
 
 Icon.loadFont();
+MatIcon.loadFont();
 Authentication.init();
 Fbase.initialize();
 

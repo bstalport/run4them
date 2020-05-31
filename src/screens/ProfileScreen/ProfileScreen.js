@@ -1,34 +1,37 @@
 // @flow
 
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import {StyleSheet, View, Image, Text} from 'react-native';
-
+import {Hideo} from 'react-native-textinput-effects';
 import {connectData} from 'src/redux';
 import Database from 'src/firebase/database';
 import Authentication from 'src/firebase/authentication';
 import auth from '@react-native-firebase/auth';
-import BackgroundFetch from "react-native-background-fetch";
-
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
+import {Avatar, CheckBox, Divider} from 'react-native-elements';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MyButton from 'src/components/MyButton';
+//import BackgroundFetch from "react-native-background-fetch";
 
 class ProfileScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      profileLoaded : false
-    }
+      name: '',
+    };
 
-    this.getData = this.getData.bind(this);
-
-    this.getData();
+    //this.getData = this.getData.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
 
     auth().onUserChanged(() => {
       this.getData();
     });
-    
-
   }
 
+  componentDidMount() {
+    this.getData();
+  }
+  /*
   componentDidMount() {
     // Configure it.
     BackgroundFetch.configure({
@@ -69,65 +72,112 @@ class ProfileScreen extends PureComponent {
           break;
       }
     });
-  }
+  }*/
 
   getData() {
     const user = Authentication.getCurrentUser();
-    if (user && !this.state.profileLoaded) {
-      this.state = {
-        userId: user.uid,
-        email: user.email,
-        name: user.displayName,
-        photoURL: user.photoURL,
-        hasAcceptedUserPublication: null,
-        lastPosition: {
-          latitude: 0,
-          longitude: 0,
-        },
-        hasSeenTutorial: null,
-        profileLoaded : false,
-      };
-
+    if (user && !this.props.data.userProfile) {
       Database.getUserProfile(
         user.uid,
-        (resp,_this) => {
-          _this.state = {
-            ..._this.state,
-            hasAcceptedUserPublication: resp.hasAcceptedUserPublication,
-            lastPosition: {
-              latitude: resp.lastPosition._latitude,
-              longitude: resp.lastPosition._longitude,
+        (resp) => {
+          this.props.setUserProfile({
+            userProfile: {
+              userId: user.uid,
+              email: user.email,
+              name: user.displayName,
+              photoURL: user.photoURL,
+              ...resp,
             },
-            hasSeenTutorial: resp.hasSeenTutorial,
-            profileLoaded : true
-          };
+          });
         },
         (error) => {
           console.log(error);
-        },this
+        },
+        this,
       );
     }
   }
 
+  async updateName() {
+    Authentication.updateProfileName(
+      this.state.name,
+      () => {
+        this.getData();
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  }
+  updateProfile() {
+    const user = Authentication.getCurrentUser();
+    Database.updateUserProfileAcceptedUserPublication(
+      user.uid,
+      !this.props.data.userProfile.hasAcceptedUserPublication,
+      (d) => {
+        this.props.setUserProfile({
+          userProfile: {
+            ...this.props.data.userProfile,
+            hasAcceptedUserPublication: !this.props.data.userProfile
+              .hasAcceptedUserPublication,
+          },
+        });
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  }
+
   render() {
+    if (!this.props.data.userProfile) {
+      return <View></View>;
+    }
     return (
       <View>
-        <Text>ProfileScreen</Text>
-        <Image
-          style={styles.photo}
-          source={{
-            uri: this.state.photoURL,
-          }}
-        />
-        <Text>User Id in Firestore :{this.state.userId}</Text>
-        <Text>Photo Url in Firestore :{this.state.photoURL}</Text>
-        <Text>Email in Firestore :{this.state.email}</Text>
-        <Text>Name in Firestore :{this.state.name}</Text>
-        <Text>
-          hasAcceptedUserPublication :{this.state.hasAcceptedUserPublication}
-        </Text>
-        <Text>lastPosition :{this.state.lastPosition.latitude}, {this.state.lastPosition.longitude}</Text>
-        <Text>hasSeenTutorial :{this.state.hasSeenTutorial}</Text>
+        <View style={styles.nameContainer}>
+          <Avatar
+            size="medium"
+            rounded
+            source={{
+              uri: this.props.data.userProfile.photoURL,
+            }}
+          />
+          <View>
+            <Text style={styles.name}>{this.props.data.userProfile.name}</Text>
+            <Text style={styles.email}>
+              {this.props.data.userProfile.email}
+            </Text>
+          </View>
+        </View>
+
+        <Divider style={styles.divider} />
+        <View style={styles.nameEdit}>
+          <Hideo
+            inputStyle={styles.inputName}
+            label={'Nom'}
+            iconClass={MaterialCommunityIcons}
+            iconName={'account'}
+            iconColor={'white'}
+            iconBackgroundColor={ColorPalette.colorLevel2}
+            onChangeText={(name) => {
+              this.setState({name});
+            }}
+            autoCapitalize="none"
+            value={this.state.name}
+          />
+          <MyButton
+            text="Mettre à jour le nom"
+            onPress={() => this.updateName()}
+            style="link"></MyButton>
+        </View>
+        <View>
+          <CheckBox
+            title="Publier mes résultats sur la page Facebook de l'application"
+            checked={this.props.data.userProfile.hasAcceptedUserPublication}
+            onPress={this.updateProfile}
+          />
+        </View>
       </View>
     );
   }
@@ -135,11 +185,31 @@ class ProfileScreen extends PureComponent {
 
 export default connectData()(ProfileScreen);
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
+  nameContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginTop: 20,
   },
-  photo: {
-    width: 200,
-    height: 200,
+  name: {
+    color: ColorPalette.textLevel3,
+    marginLeft: 10,
+  },
+  email: {
+    color: ColorPalette.textLevel4,
+    marginLeft: 10,
+  },
+  divider: {
+    marginHorizontal: 10,
+    marginVertical: 20,
+  },
+  nameEdit: {
+    height: 100,
+    margin: 10,
+  },
+  inputName: {
+    color: ColorPalette.colorLevel1,
+    backgroundColor: ColorPalette.backgroundLevel2,
   },
 });

@@ -6,24 +6,21 @@ import firestore from '@react-native-firebase/firestore';
 import Authentication from 'src/firebase/authentication';
 
 class Database {
-  static createUserProfile(
+
+  static updateUserProfileLastPosition(
     userId,
-    hasAcceptedUserPublication,
     lastPosition,
-    hasSeenTutorial,
     fnSuccess,
     fnError,
   ) {
     firestore()
       .collection('Users')
       .doc(userId)
-      .set({
-        hasAcceptedUserPublication: hasAcceptedUserPublication,
+      .update({
         lastPosition: new firestore.GeoPoint(
           lastPosition.latitude,
           lastPosition.longitude,
         ),
-        hasSeenTutorial: hasSeenTutorial,
       })
       .then((DocReference) => {
         fnSuccess(DocReference);
@@ -33,13 +30,34 @@ class Database {
       });
   }
 
-  static getUserProfile(userId, fnSuccess, fnError, _this) {
+
+  static updateUserProfileAcceptedUserPublication(
+    userId,
+    hasAcceptedUserPublication,
+    fnSuccess,
+    fnError,
+  ) {
+    firestore()
+      .collection('Users')
+      .doc(userId)
+      .update({
+        hasAcceptedUserPublication: hasAcceptedUserPublication,
+      })
+      .then((DocReference) => {
+        fnSuccess(DocReference);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
+  }
+
+  static getUserProfile(userId, fnSuccess, fnError) {
     firestore()
       .collection('Users')
       .doc(userId)
       .get()
       .then((DocReference) => {
-        fnSuccess(DocReference.data(), _this);
+        fnSuccess(DocReference.data());
       })
       .catch((error) => {
         fnError(error);
@@ -70,7 +88,7 @@ class Database {
     let today = new Date();
     firestore()
       .collection('Activities')
-      .where('creationTime','<=', today)
+      .where('creationTime', '<=', today)
       .get()
       .then((querySnapshot) => {
         fnSuccess(querySnapshot);
