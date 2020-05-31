@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, ActivityIndicator, Image} from 'react-native';
-//import * as fabfirebaseapp from 'react-native-firebase';
 import storage from '@react-native-firebase/storage';
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 
 export default class AsyncImage extends React.Component {
   constructor(props) {

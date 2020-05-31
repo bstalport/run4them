@@ -2,6 +2,7 @@
 
 import {Navigation} from 'react-native-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 import {
   LOGIN_SCREEN,
   SIGN_UP_SCREEN,
@@ -36,19 +37,19 @@ function setDefault() {
   Navigation.setDefaultOptions({
     topBar: {
       background: {
-        color: '#141a30',
+        color: ColorPalette.colorLevel1,
       },
       title: {
-        color: 'white',
+        color: ColorPalette.textLevel1,
       },
       backButton: {
-        title: '', // Remove previous screen name from back button
+        //title: '', // Remove previous screen name from back button
         color: 'white',
       },
-      buttonColor: 'white',
+      buttonColor: ColorPalette.textLevel1,
     },
     statusBar: {
-      backgroundColor: '#141a30',
+      backgroundColor: ColorPalette.colorLevel1,
       style: 'light'
     },
     layout: {
@@ -56,12 +57,13 @@ function setDefault() {
     },
     bottomTabs: {
       titleDisplayMode: 'alwaysShow',
+      backgroundColor: ColorPalette.colorLevel1,
     },
     bottomTab: {
-      textColor: 'gray',
-      selectedTextColor: 'black',
-      iconColor: 'gray',
-      selectedIconColor: 'black',
+      textColor: ColorPalette.textLevel4,
+      selectedTextColor: ColorPalette.textLevel1,
+      iconColor: ColorPalette.textLevel4,
+      selectedIconColor: ColorPalette.textLevel1,
     },
   });
 }
@@ -106,11 +108,28 @@ export function pushLoginScreen() {
           {
             component: {
               name: SIGN_UP_SCREEN,
+              options: {
+                topBar: {
+                  title: {
+                    text: 'Créer un compte',
+                  },
+                },
+              },
             },
           },
           {
             component: {
               name: LOGIN_SCREEN,
+              options: {
+                topBar: {
+                  title: {
+                    text: 'Connexion',
+                  },
+                  backButton: {
+                    visible: false,
+                  },
+                },
+              },
             },
           },
         ],
@@ -337,7 +356,7 @@ export function pushHomeScreen() {
                     options: {
                       topBar: {
                         title: {
-                          text: 'Activity History',
+                          text: 'Vos dons',
                         },
                         leftButtons: [
                           {

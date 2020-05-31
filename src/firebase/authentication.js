@@ -22,25 +22,22 @@ class Authentication {
       });
   }
 
+  static resetPassword(email, fnSuccess, fnError) {
+    auth()
+      .sendPasswordResetEmail(email)
+      .then(function (user) {
+        fnSuccess(user);
+      })
+      .catch(function (e) {
+        fnError(e);
+      });
+  }
+
   static login(email, pwd, fnSuccess, fnError) {
     auth()
       .signInWithEmailAndPassword(email, pwd)
       .then((resp) => {
-        Database.createUserProfile(
-          resp.user.uid,
-          false,
-          {
-            latitude: 50.64716,
-            longitude: 5.578397,
-          },
-          false,
-          () => {
-            fnSuccess(resp);
-          },
-          (error) => {
-            fnError(error);
-          },
-        );
+        fnSuccess(resp);
       })
       .catch((error) => {
         fnError(error);
@@ -58,12 +55,17 @@ class Authentication {
       .catch((error) => fnError(error));
   }
 
-  static async updateProfile(name, picUrl) {
-    const update = {
-      displayName: name,
-      photoURL: picUrl,
-    };
-    await auth().currentUser.updateProfile(update);
+  static updateProfileName(name, fnSuccess, fnError) {
+    auth().currentUser
+      .updateProfile({
+        displayName: name
+      })
+      .then(function () {
+        fnSuccess();
+      })
+      .catch(function (error) {
+        fnError(error);
+      });
   }
 
   static async loginWithGoogle(fnSuccess, fnError) {
@@ -73,31 +75,15 @@ class Authentication {
 
     return auth()
       .signInWithCredential(googleCredential)
-      .then((resp) => {
-        Authentication.updateProfile(user.user.name, user.user.photo);
-        Database.createUserProfile(
-          resp.user.uid,
-          false,
-          {
-            latitude: 50.64716,
-            longitude: 5.578397,
-          },
-          false,
-          () => {
-            fnSuccess(user)
-          },
-          (error) => {
-            fnError(error);
-          },
-        );
-        
+      .then(() => {
+        fnSuccess();
       })
       .catch((error) => {
         fnError(error);
       });
   }
 
-  static async loginWithFaceBook() {
+  static async loginWithFaceBook(fnSuccess, fnError) {
     // Attempt login with permissions
     const result = await LoginManager.logInWithPermissions([
       'public_profile',
@@ -121,7 +107,14 @@ class Authentication {
     );
 
     // Sign-in the user with the credential
-    return auth().signInWithCredential(facebookCredential);
+    auth()
+      .signInWithCredential(facebookCredential)
+      .then(() => {
+        fnSuccess();
+      })
+      .catch((error) => {
+        fnError(error);
+      });
   }
 
   static signup(email, pwd, fnSuccess, fnError) {

@@ -1,16 +1,14 @@
 // @flow
 
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import {StyleSheet, View, Button, Text} from 'react-native';
-
-import {Sae} from 'react-native-textinput-effects';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {Hideo} from 'react-native-textinput-effects';
 import auth from '@react-native-firebase/auth';
-import Database from 'src/firebase/database';
 import Authentication from 'src/firebase/authentication';
 import {connectData} from 'src/redux';
-//import { pushSingleScreenApp, pushTabBasedApp } from 'src/navigation';
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MyButton from 'src/components/MyButton';
 
 class SignupScreen extends PureComponent {
   constructor(props) {
@@ -24,19 +22,9 @@ class SignupScreen extends PureComponent {
       userId: '',
     };
 
-    this.updateUserProfile = this.updateUserProfile.bind(this);
     this.signup = this.signup.bind(this);
 
-
-    auth().onAuthStateChanged((user) => this.updateUserProfile(user));
-
-  }
-
-  updateUserProfile(user) {
-    if (user && this.state.name != ''){
-      Authentication.updateProfile(this.state.name);
-    }
-    
+    auth().onAuthStateChanged((user) => {});
   }
 
   signup() {
@@ -51,65 +39,78 @@ class SignupScreen extends PureComponent {
       (error) => {
         if (error.code === 'auth/email-already-in-use') {
           this.setState({
-            response: 'That email address is already in use!',
+            response: 'Cet email est déjà utilisé',
           });
         } else if (error.code === 'auth/invalid-email') {
           this.setState({
-            response: 'That email address is invalid!',
+            response: 'Adresse email non valide',
           });
         } else {
           this.setState({
-            response: error.toString(),
+            response: error.nativeErrorMessage.toString(),
           });
         }
       },
     );
   }
+  displayError(response) {
+    if (response && response !== '') {
+      return (
+        <Text style={StylesGlobal.errorMessage}>{response.toString()}</Text>
+      );
+    } else {
+      return <Text></Text>;
+    }
+  }
 
   render() {
     return (
-      <View>
-        <Text>SignupScreen</Text>
-        <Text>{this.state.response}</Text>
-        <Text>User Id in Firestore{this.state.userId}</Text>
-        <Text>Email in Firestore{this.state.email}</Text>
-        <Text>Name in Firestore{this.state.name}</Text>
-        <Sae
-          style={styles.button}
-          inputStyle={{color: '#db786d'}}
-          label={'Nom'}
-          iconClass={FontAwesomeIcon}
-          iconName={'pencil'}
-          iconColor={'black'}
-          onChangeText={(name) => this.setState({name})}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <Sae
-          style={styles.button}
-          inputStyle={{color: '#db786d'}}
-          label={'Email Address'}
-          iconClass={FontAwesomeIcon}
-          iconName={'pencil'}
-          iconColor={'black'}
-          onChangeText={(email) => this.setState({email})}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <Sae
-          style={styles.button}
-          inputStyle={{color: '#db786d'}}
-          label={'Password'}
-          iconClass={FontAwesomeIcon}
-          iconName={'key'}
-          iconColor={'black'}
-          onChangeText={(password) => this.setState({password})}
-          password={true}
-          autoCapitalize="none"
-        />
-        <Button title="Créer compte" onPress={() => this.signup()}>
-          Créer compte
-        </Button>
+      <View style={styles.container}>
+        <View style={styles.fields}>
+          <Text style={StylesGlobal.labelLight}>Nom</Text>
+          <Hideo
+            inputStyle={{color: ColorPalette.colorLevel1}}
+            label={'Nom'}
+            iconClass={MaterialCommunityIcons}
+            iconName={'account'}
+            iconColor={'white'}
+            iconBackgroundColor={ColorPalette.colorLevel2}
+            onChangeText={(name) => this.setState({name})}
+            autoCapitalize="none"
+          />
+          <Text style={StylesGlobal.labelLight}>Email</Text>
+          <Hideo
+            inputStyle={{color: ColorPalette.colorLevel1}}
+            label={'Email'}
+            iconClass={MaterialCommunityIcons}
+            iconName={'email'}
+            iconColor={'white'}
+            iconBackgroundColor={ColorPalette.colorLevel2}
+            onChangeText={(email) => this.setState({email})}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <Text style={StylesGlobal.labelLight}>Mot de passe</Text>
+          <Hideo
+            inputStyle={{color: ColorPalette.colorLevel1}}
+            label={'Password'}
+            iconClass={MaterialCommunityIcons}
+            iconName={'key'}
+            iconColor={'white'}
+            iconBackgroundColor={ColorPalette.colorLevel2}
+            onChangeText={(password) => this.setState({password})}
+            password={true}
+            secureTextEntry={true}
+            autoCapitalize="none"
+          />
+          {this.displayError(this.state.response)}
+          <View style={styles.separator}>
+            <MyButton
+              text="Créer compte"
+              onPress={() => this.signup()}
+              style="main"></MyButton>
+          </View>
+        </View>
       </View>
     );
   }
@@ -118,14 +119,20 @@ class SignupScreen extends PureComponent {
 export default connectData()(SignupScreen);
 
 const styles = StyleSheet.create({
-  flex: {
+  container: {
     flex: 1,
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    backgroundColor: ColorPalette.backgroundLevel1,
   },
-  button: {
+  fields: {
+    height: 350,
+    padding: 10,
     width: '100%',
-    color: 'black',
   },
+  separator:{
+    marginTop:10
+  }
 });

@@ -10,6 +10,8 @@ export const SET_HEALTHKIT_ACTIVITIES = 'data/SET_HEALTHKIT_ACTIVITIES';
 export const CLEAR_ACTIVITIES = 'data/CLEAR_ACTIVITIES';
 export const SET_CURRENT_ACTIVITY = 'data/SET_CURRENT_ACTIVITY';
 export const UPDATE_SPONSOR_IN_ACTIVITY = 'data/UPDATE_SPONSOR_IN_ACTIVITY';
+export const USER_PROFILE = 'data/USER_PROFILE';
+export const CLEAR_ALL = 'data/CLEAR_ALL'
 
 export const fetchDataActionCreators = {
   getFacebookUserData: createAction(GET_FACEBOOK_DATA),
@@ -20,4 +22,6 @@ export const fetchDataActionCreators = {
   clearActivities:createAction(CLEAR_ACTIVITIES),
   setCurrentActivity:createAction(SET_CURRENT_ACTIVITY),
   updateSponsorInCurrentActivity:createAction(UPDATE_SPONSOR_IN_ACTIVITY),
+  setUserProfile:createAction(USER_PROFILE),
+  clearAll:createAction(CLEAR_ALL),
 };

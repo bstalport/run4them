@@ -71,9 +71,8 @@ class ActivityHistoryScreen extends Component {
     //console.log(this.state.activities); //<ActivityListItem item={item} style={styles.item} />//{this.state.activities}
     //console.log(this.state.listUpdated);
     return (
-      <View>
-        <Text>Activity History Screen</Text>
-
+      <View style={styles.container}>
+        
         <FlatList
           //style={styles.listContainer}
           data={this.state.activities}
@@ -97,7 +96,6 @@ export default connectData()(ActivityHistoryScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
   },
   listContainer: {
     flex: 1,

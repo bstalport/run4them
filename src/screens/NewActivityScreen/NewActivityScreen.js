@@ -13,10 +13,11 @@ import {pushStravaAuth} from 'src/navigation';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import MapView, {Polyline, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Authentication from 'src/firebase/authentication';
-import Database from 'src/firebase/database';
-import {TextInput} from 'react-native-gesture-handler';
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Navigation} from 'react-native-navigation';
 import { SELECT_SPONSOR_SCREEN } from 'src/navigation/Screens';
+import MyButton from 'src/components/MyButton';
 
 class NewActivityScreen extends Component {
   constructor(props) {
@@ -29,17 +30,22 @@ class NewActivityScreen extends Component {
 
   componentDidUpdate(nextProps) {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.authHealthKit();
+  }
 
   componentWillUnmount() {}
 
   authHealthKit() {
+    let enddate = new Date();
+    let startdate = new Date(enddate.getDate() - 100);
+      
     let options = {
       permissions: {
         read: ['DistanceWalkingRunning', 'Workout'],
       },
-      startDate: new Date(2020, 1, 1).toISOString(),
-      endDate: new Date().toISOString(),
+      startDate: enddate.toISOString(),
+      endDate: startdate.toISOString(),
       type: 'Workout', // one of: ['Walking', 'StairClimbing', 'Running', 'Cycling', 'Workout']
       unit: 'meter',
     };
@@ -100,14 +106,18 @@ class NewActivityScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>New race screen</Text>
-        <Button title="HealthKit" onPress={() => this.authHealthKit()}>
-          Activité
-        </Button>
-        <Button title="Strava" onPress={() => this.authStrava()}>
-          Strava
-        </Button>
+      <View style={StylesGlobal.container}>
+        <Text style={StylesGlobal.title1}>Choisissez une activité</Text>
+        <Text style={StylesGlobal.text}>Il n'est possible de valider que vos activités qui ont eu lieu dans les dernières 24h</Text>
+
+        <Text style={StylesGlobal.text}>Vos joggings de l'application "Activité" de votre iphone sont automatiquement listés ci-dessous. Il est également possible d'importer les activités depuis Strava</Text>
+        
+        <MyButton
+            icon="strava"
+            text="Importer depuis Strava"
+            onPress={() => this.authStrava()}
+            style="strava"></MyButton>
+
         <FlatList
           style={styles.listContainer}
           data={this.props.data.activities}
@@ -123,22 +133,9 @@ class NewActivityScreen extends Component {
 export default connectData()(NewActivityScreen);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 30,
-  },
+  
   listContainer: {
     flex: 1,
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    fontSize: 32,
-    color: '#000000',
-  },
-  title: {
-    fontSize: 32,
-  },
+  
 });

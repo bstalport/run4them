@@ -11,6 +11,8 @@ import {
   CLEAR_ACTIVITIES,
   SET_CURRENT_ACTIVITY,
   UPDATE_SPONSOR_IN_ACTIVITY,
+  USER_PROFILE,
+  CLEAR_ALL,
 } from './actions';
 
 export const DEFAULT = {};
@@ -160,6 +162,21 @@ export default function data(state = DEFAULT, action = {}) {
         return state;
       }
     }
+    case USER_PROFILE: {
+      if (payload) {
+        return {
+          ...state,
+          userProfile: payload.userProfile,
+        };
+      } else {
+        return state;
+      }
+    }
+
+    case CLEAR_ALL: {
+      return {}
+    }
+
     default:
       return state;
   }
