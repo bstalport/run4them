@@ -38,18 +38,22 @@ class SelectSponsorScreen extends PureComponent {
   }
 
   goToAd() {
-    this.props.updateSponsorInCurrentActivity({
-      sponsorId: this.state.sponsorId,
-    });
-    Navigation.push(this.props.componentId, {
-      component: {
-        name: AD_SPONSOR_SCREEN,
-      },
-    });
+    const selectedSponsor = this.state.sponsorsList.filter(
+      (s) => s.sponsorId == this.state.sponsorId,
+    );
+    if (selectedSponsor.length === 1) {
+      this.props.updateSponsorInCurrentActivity({
+        sponsor: selectedSponsor[0],
+      });
+      Navigation.push(this.props.componentId, {
+        component: {
+          name: AD_SPONSOR_SCREEN,
+        },
+      });
+    }
   }
 
   render() {
-    
     return (
       <View style={StylesGlobal.container}>
         <Text style={StylesGlobal.title1}>
@@ -60,9 +64,12 @@ class SelectSponsorScreen extends PureComponent {
           data={this.state.sponsorsList}
           renderItem={({item}) => (
             <TouchableOpacity
-              style={(item.sponsorId === this.state.sponsorId)? styles.sponsorImgContainerSelected :styles.sponsorImgContainer}
-              onPress={() => this.selectSponsor(item.sponsorId)}
-              >
+              style={
+                item.sponsorId === this.state.sponsorId
+                  ? styles.sponsorImgContainerSelected
+                  : styles.sponsorImgContainer
+              }
+              onPress={() => this.selectSponsor(item.sponsorId)}>
               <AsyncImage
                 image={item.logoUrl}
                 style={{
@@ -89,19 +96,18 @@ class SelectSponsorScreen extends PureComponent {
 
 export default connectData()(SelectSponsorScreen);
 const styles = StyleSheet.create({
-  
   sponsorImgContainer: {
     padding: 10,
-    margin:5,
+    margin: 5,
     borderWidth: 1,
     borderColor: ColorPalette.textLevel4,
     //opacity:1
   },
   sponsorImgContainerSelected: {
     padding: 10,
-    margin:5,
+    margin: 5,
     borderWidth: 1,
     borderColor: ColorPalette.textLevel4,
-    backgroundColor:ColorPalette.backgroundLevel2
+    backgroundColor: ColorPalette.backgroundLevel2,
   },
 });

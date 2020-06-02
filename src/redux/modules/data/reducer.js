@@ -41,12 +41,12 @@ export default function data(state = DEFAULT, action = {}) {
     }
 
     case UPDATE_SPONSOR_IN_ACTIVITY:{
-      if (payload.sponsorId) {
+      if (payload.sponsor) {
         return {
           ...state,
           currentActivity: {
             ...state.currentActivity,
-            sponsorId : payload.sponsorId
+            sponsor : payload.sponsor
           }
         };
       }

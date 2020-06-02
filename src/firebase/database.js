@@ -4,9 +4,9 @@
 
 import firestore from '@react-native-firebase/firestore';
 import Authentication from 'src/firebase/authentication';
+import auth from '@react-native-firebase/auth';
 
 class Database {
-
   static updateUserProfileLastPosition(
     userId,
     lastPosition,
@@ -29,7 +29,6 @@ class Database {
         fnError(error);
       });
   }
-
 
   static updateUserProfileAcceptedUserPublication(
     userId,
@@ -66,17 +65,46 @@ class Database {
 
   static getSponsors(fnSuccess, fnError) {
     firestore()
-      .collection('Sponsors')
+      .collection('Campains')
       .get()
-      .then((querySnapshot) => {
-        let docs = [];
-        querySnapshot.docs.forEach((doc) => {
-          docs.push({
-            ...doc.data(),
-            sponsorId: doc.id,
+      .then((campSnashot) => {
+        firestore()
+          .collection('Sponsors')
+          .get()
+          .then((sponsorSnapshot) => {
+            let docs = [];
+            sponsorSnapshot.docs.forEach((doc) => {
+              // for each sponsor, find the related campain
+              let campain = null;
+              campSnashot.docs.forEach((camp) => {
+                if (campain === null) {
+                  var today = new Date();
+                  var c = camp.data();
+                  if (
+                    c.sponsorId === doc.id &&
+                    c.startDate.toDate() <= today &&
+                    c.endDate.toDate() >= today &&
+                    c.totalBudget - c.budgetUsed > 0
+                  ) {
+                    campain = {
+                      ...c,
+                      campainId: camp.id,
+                    };
+                  }
+                }
+              });
+              if (campain)
+                docs.push({
+                  ...doc.data(),
+                  sponsorId: doc.id,
+                  campain: campain,
+                });
+            });
+            fnSuccess(docs);
+          })
+          .catch((error) => {
+            fnError(error);
           });
-        });
-        fnSuccess(docs);
       })
       .catch((error) => {
         fnError(error);
@@ -84,22 +112,31 @@ class Database {
   }
 
   static getActivities(fnSuccess, fnError) {
-    //const user = Authentication.getCurrentUser();
-    let today = new Date();
-    firestore()
-      .collection('Activities')
-      .where('creationTime', '<=', today)
-      .get()
-      .then((querySnapshot) => {
-        fnSuccess(querySnapshot);
-      })
-      .catch((error) => {
-        fnError(error);
-      });
+    const user = auth().currentUser; //Authentication.getCurrentUser();
+    if (user) {
+      //let today = new Date();
+      firestore()
+        .collection('Activities')
+        //.where('creationTime', '<=', today)
+        .where('userId', '==', user.uid)
+        .get()
+        .then((querySnapshot) => {
+          fnSuccess(querySnapshot);
+        })
+        .catch((error) => {
+          fnError(error);
+        });
+    }
   }
 
   static listenUserProfile(fnSuccess, fnError) {
-    firestore().collection('Activities').onSnapshot(fnSuccess, fnError);
+    const user = auth().currentUser; //Authentication.getCurrentUser();
+    if (user) {
+      firestore()
+        .collection('Activities')
+        .where('userId', '==', user.uid)
+        .onSnapshot(fnSuccess, fnError);
+    }
   }
 
   static createActivity(data, fnSuccess, fnError) {
