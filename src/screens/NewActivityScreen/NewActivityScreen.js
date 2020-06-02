@@ -38,14 +38,14 @@ class NewActivityScreen extends Component {
 
   authHealthKit() {
     let enddate = new Date();
-    let startdate = new Date(enddate.getDate() - 100);
+    let startdate = new Date(enddate.getDate() - 30);
       
     let options = {
       permissions: {
         read: ['DistanceWalkingRunning', 'Workout'],
       },
-      startDate: enddate.toISOString(),
-      endDate: startdate.toISOString(),
+      startDate: startdate.toISOString(),
+      endDate: enddate.toISOString(),
       type: 'Workout', // one of: ['Walking', 'StairClimbing', 'Running', 'Cycling', 'Workout']
       unit: 'meter',
     };

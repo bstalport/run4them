@@ -15,10 +15,18 @@ class SelectSponsorScreen extends PureComponent {
     this.state = {
       sponsorId: '',
       sponsorsList: [],
+      btnValue: '5',
+      btnIcon: ''
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    setTimeout(()=> this.setState({btnValue:'4'}), 1000);
+    setTimeout(()=> this.setState({btnValue:'3'}), 2000)
+    setTimeout(()=> this.setState({btnValue:'2'}), 3000)
+    setTimeout(()=> this.setState({btnValue:'1'}), 4000)
+    setTimeout(()=> this.setState({btnValue:"Valider l'activité", btnIcon:'check'}), 5000)
+  }
 
   validateActivity() {
     const data = this.props.data.currentActivity;
@@ -39,12 +47,31 @@ class SelectSponsorScreen extends PureComponent {
     }
   }
 
+  _renderAd() {
+    if (this.props.data.currentActivity 
+      && this.props.data.currentActivity.sponsor
+      && this.props.data.currentActivity.sponsor.campain) {
+        
+      return (
+        <AsyncImage
+          image={this.props.data.currentActivity.sponsor.campain.AdUrl}
+          style={{
+            width: '100%',
+            resizeMode: 'contain',
+            flex:1
+          }}></AsyncImage>
+      );
+    } else {
+      return <Text></Text>;
+    }
+  }
   render() {
     return (
       <View style={StylesGlobal.container}>
+        { this._renderAd()}
         <MyButton
-          icon="arrow-right-bold"
-          text="Valider l'activité"
+          icon={this.state.btnIcon}
+          text={this.state.btnValue}
           onPress={() => this.validateActivity()}
           style="main"></MyButton>
       </View>

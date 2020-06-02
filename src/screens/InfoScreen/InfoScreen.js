@@ -15,7 +15,7 @@ class InfoScreen extends PureComponent {
  
   render() {
     return (
-      <View>
+      <View style="">
         <Text>InfoScreen</Text>
        
       </View>

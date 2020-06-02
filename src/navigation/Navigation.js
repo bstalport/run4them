@@ -15,6 +15,8 @@ import {
   AD_SPONSOR_SCREEN,
   HOME_SCREEN,
   INTRO_SCREEN,
+  PODIUM_SCREEN,
+  PODIUM_DETAILS_SCREEN
 } from './Screens';
 import registerScreens from './registerScreens';
 import Authentication from 'src/firebase/authentication';
@@ -174,6 +176,7 @@ export function pushHomeScreen() {
   Navigation.setRoot({
     root: {
       bottomTabs: {
+        id: 'BOTTOM_TABS_LAYOUT',
         children: [
           {
             stack: {
@@ -216,6 +219,7 @@ export function pushHomeScreen() {
           },
           {
             stack: {
+              id: 'NEW_ACTIVITY_TAB',
               children: [
                 {
                   component: {
@@ -225,6 +229,13 @@ export function pushHomeScreen() {
                         backButton: {
                           visible: false,
                         },
+                        leftButtons: [
+                          {
+                            id: 'nav_home_btn',
+                            icon: require('assets/icons/ic_nav_home.png'),
+                            color: 'white',
+                          },
+                        ],
                         title: {
                           text: 'Merci!',
                         },
@@ -278,6 +289,7 @@ export function pushHomeScreen() {
                     },
                   },
                 },
+
                 {
                   component: {
                     name: NEW_ACTIVITY_SCREEN,
@@ -304,6 +316,10 @@ export function pushHomeScreen() {
                     },
                   },
                 },
+                
+                
+                
+                
               ],
               options: {
                 bottomTab: {
@@ -384,6 +400,66 @@ export function pushHomeScreen() {
                   fontSize: '10px',
                   testID: 'ACTIVITY_HISTORY_SCREEN',
                   text: 'Activités',
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              children: [
+                
+                {
+                  component: {
+                    name: PODIUM_DETAILS_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Résultats',
+                        },
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+                {
+                  component: {
+                    name: PODIUM_SCREEN,
+                    options: {
+                      topBar: {
+                        title: {
+                          text: 'Résultats',
+                        },
+                        leftButtons: [
+                          {
+                            id: 'nav_home_btn',
+                            icon: require('assets/icons/ic_nav_home.png'),
+                            color: 'white',
+                          },
+                        ],
+                        rightButtons: [
+                          {
+                            id: 'nav_logout_btn',
+                            icon: require('assets/icons/ic_nav_logout.png'),
+                            color: 'white',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                }
+              ],
+              options: {
+                bottomTab: {
+                  icon: require('assets/icons/ic_tab_menu.png'),
+                  color: 'black',
+                  fontSize: '10px',
+                  text: 'Résultats',
                 },
               },
             },

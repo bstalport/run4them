@@ -11,3 +11,5 @@ export const AD_SPONSOR_SCREEN = 'r4t.AdSponsorScreen';
 export const ACTIVITY_HISTORY_SCREEN = 'r4t.ActivityHistoryScreen';
 export const HOME_SCREEN = 'r4t.HomeScreen';
 export const INTRO_SCREEN = 'r4t.IntroScreen';
+export const PODIUM_SCREEN = 'r4t.PodiumScreen';
+export const PODIUM_DETAILS_SCREEN = 'r4t.PodiumDetailsScreen';

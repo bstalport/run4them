@@ -13,3 +13,6 @@ export { default as ProfileScreen } from './ProfileScreen/ProfileScreen';
 export { default as InfoScreen } from './InfoScreen/InfoScreen';
 export { default as HomeScreen } from './HomeScreen/HomeScreen';
 export { default as IntroScreen } from './IntroScreen/IntroScreen';
+
+export { default as PodiumDetailsScreen } from './PodiumScreen/PodiumDetailsScreen';
+export { default as PodiumScreen } from './PodiumScreen/PodiumScreen';
