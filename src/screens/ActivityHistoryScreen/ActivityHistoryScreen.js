@@ -5,6 +5,7 @@ import {View, Text, StyleSheet, FlatList} from 'react-native';
 import Database from 'src/firebase/database';
 import {connectData} from 'src/redux';
 import ActivityListItem from 'src/components/ActivityListItem';
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 
 class ActivityHistoryScreen extends Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class ActivityHistoryScreen extends Component {
     //console.log(this.state.activities); //<ActivityListItem item={item} style={styles.item} />//{this.state.activities}
     //console.log(this.state.listUpdated);
     return (
-      <View style={styles.container}>
+      <View style={StylesGlobal.container}>
         
         <FlatList
           //style={styles.listContainer}
@@ -94,9 +95,6 @@ class ActivityHistoryScreen extends Component {
 export default connectData()(ActivityHistoryScreen);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   listContainer: {
     flex: 1,
   },

@@ -63,6 +63,25 @@ class Database {
       });
   }
 
+  static getUsersList(fnSuccess, fnError) {
+    firestore()
+      .collection('Users')
+      .get()
+      .then((DocReference) => {
+        let aRes = [];
+        DocReference.docs.map((act) =>
+          aRes.push({
+            id:act.id,
+            ...act.data(),
+          })
+        );
+        fnSuccess(aRes);
+      })
+      .catch((error) => {
+        fnError(error);
+      });
+  }
+
   static getSponsors(fnSuccess, fnError) {
     firestore()
       .collection('Campains')
@@ -111,14 +130,20 @@ class Database {
       });
   }
 
-  static getActivities(fnSuccess, fnError) {
+  static getActivities(fnSuccess, fnError, uId) {
+    let userId = '';
+    if (uId) {
+      userId = uId;
+    }else{
+      userId = (auth().currentUser) ? auth().currentUser.uid : '';
+    }
     const user = auth().currentUser; //Authentication.getCurrentUser();
-    if (user) {
+    if (user && userId != '') {
       //let today = new Date();
       firestore()
         .collection('Activities')
         //.where('creationTime', '<=', today)
-        .where('userId', '==', user.uid)
+        .where('userId', '==', userId)
         .get()
         .then((querySnapshot) => {
           fnSuccess(querySnapshot);
@@ -144,6 +169,7 @@ class Database {
       .collection('Activities')
       .add({
         ...data,
+        sponsor:null,
         creationTime: firestore.Timestamp.now(),
       })
       .then((DocReference) => {

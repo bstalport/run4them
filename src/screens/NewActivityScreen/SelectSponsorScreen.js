@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, View, FlatList, Text, TouchableOpacity} from 'react-native';
 import Database from 'src/firebase/database';
 import {connectData} from 'src/redux';
-import Button from 'apsl-react-native-button';
 import {Navigation} from 'react-native-navigation';
 import {AD_SPONSOR_SCREEN} from 'src/navigation/Screens';
 import AsyncImage from 'src/components/AsyncImage';

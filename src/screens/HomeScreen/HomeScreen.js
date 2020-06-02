@@ -1,16 +1,32 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {connectData} from 'src/redux';
 import {Navigation} from 'react-native-navigation';
 import {PROFILE_SCREEN,NEW_ACTIVITY_SCREEN} from 'src/navigation/Screens';
 import MyButton from 'src/components/MyButton';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
+import messaging, { AuthorizationStatus } from '@react-native-firebase/messaging';
+import iid from '@react-native-firebase/iid';
+
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === AuthorizationStatus.AUTHORIZED ||
+    authStatus === AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
+
+
 
 class HomeScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
 
+    requestUserPermission();
     
     Navigation.events().registerNavigationButtonPressedListener(({buttonId}) => {
       switch (buttonId) {
