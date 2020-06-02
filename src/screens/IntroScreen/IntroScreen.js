@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     
   },
   slide:{
-    backgroundColor:'#F00',
+    backgroundColor:'#CCC',
     flex: 1,
   },
   title: {
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
 const slides = [
     {
       key: 'k1',
-      title: 'Ecommerce Leader',
-      text: 'Best ecommerce in the world',
+      title: '1er page de tuto',
+      text: 'A quoi ça sert?',
       image: {
         uri: 'https://i.imgur.com/jr6pfzM.png',
       },
@@ -109,8 +109,8 @@ const slides = [
     },
     {
       key: 'k2',
-      title: 'fast delivery',
-      text: 'get your order insantly fast',
+      title: '2eme page de tuto',
+      text: 'Pour qui',
       image: {
         uri: 'https://i.imgur.com/au4H7Vt.png',
       },
@@ -121,8 +121,8 @@ const slides = [
     },
     {
       key: 'k3',
-      title: 'many store ',
-      text: 'Multiple store location',
+      title: '3eme page de tuto',
+      text: 'Comment ça fonctionne',
       image: {
         uri: 'https://i.imgur.com/bXgn893.png',
       },
@@ -131,17 +131,6 @@ const slides = [
       imageStyle: styles.image,
       backgroundColor: '#4093D2',
     },
-    {
-      key: 'k4',
-      title: '24 hours suport',
-      text: ' Get Support 24 Hours with Real Human',
-      image: {
-        uri: 'https://i.imgur.com/mFKL47j.png',
-      },
-      titleStyle: styles.title,
-      textStyle: styles.text,
-      imageStyle: styles.image,
-      backgroundColor: '#644EE2',
-    },
+    
   ];
   

@@ -1,26 +1,72 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View, FlatList, Text} from 'react-native';
 import {connectData} from 'src/redux';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
+import {ListItem} from 'react-native-elements';
+import Database from 'src/firebase/database';
+import {Navigation} from 'react-native-navigation';
+import {PODIUM_DETAILS_SCREEN} from 'src/navigation/Screens';
 
 class PodiumScreen extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userList: []
+    };
+  }
+  
+  
+ 
+
+  componentDidMount() {
+    Database.getUsersList(
+      (data) => {
+        this.setState({
+          userList: data,
+        });
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   }
 
- 
+  handleUserSelected(user){
+    Navigation.push(this.props.componentId, {
+      component: {
+        name: PODIUM_DETAILS_SCREEN,
+        passProps: {
+          userId: user
+        }
+      },
+    });
+  }
+
+  keyExtractor = (item, index) => index.toString();
+
+  renderItem = ({item}) => (
+    <ListItem
+      title={item.displayName}
+      subtitle={item.totalValue}
+      leftAvatar={{source: {uri: item.photoURL}}}
+      bottomDivider
+      chevron
+      onPress={() => this.handleUserSelected(item.id)}
+    />
+  );
+
   render() {
     return (
       <View style={StylesGlobal.container}>
-        <Text>Podium</Text>
-       
+        <FlatList
+          keyExtractor={this.keyExtractor}
+          data={this.state.userList}
+          renderItem={this.renderItem}
+        />
       </View>
     );
   }
 }
 
 export default connectData()(PodiumScreen);
-const styles = StyleSheet.create({
-  
-});
+const styles = StyleSheet.create({});
