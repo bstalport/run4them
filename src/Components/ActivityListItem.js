@@ -2,18 +2,18 @@ import React, {Component} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import PropTypes from 'prop-types';
 import convert from 'convert-units';
+
 
 export default class ActivityListItem extends Component {
   constructor(props) {
     super(props);
 
     const startDate = this.props.item.startTime
-      ? new Date(this.props.item.startTime.seconds * 1000).toLocaleDateString()
+      ? new Date(this.props.item.startTime._seconds * 1000).toLocaleDateString()
       : '';
     const endDate = this.props.item.endDate
-      ? new Date(this.props.item.endDate.seconds * 1000).toLocaleDateString()
+      ? new Date(this.props.item.endDate._seconds * 1000).toLocaleDateString()
       : '';
     const distance =
       this.props.item.distance < 1000
@@ -22,7 +22,9 @@ export default class ActivityListItem extends Component {
     const duration =
       convert(this.props.item.moving_time).from('s').to('min').toFixed(0) +
       'min';
-    const speed = this.props.item.average_speed + 'min/km'; //convert(this.props.item.average_speed).from('m/h').to('km/h').toFixed(3);
+    const speed = this.props.item.average_speed
+      ? this.props.item.average_speed.toFixed(2) + 'm/km'
+      : ''; //convert(this.props.item.average_speed).from('m/h').to('km/h').toFixed(3);
     let status = '';
     switch (this.props.item.status) {
       case 'pending':
@@ -46,12 +48,30 @@ export default class ActivityListItem extends Component {
       distance: distance,
       speed: speed,
       showValue:
-        this.props.item.status && this.props.item.status == 'validated' ? true : false,
+        this.props.item.status && this.props.item.status == 'validated'
+          ? true
+          : false,
       status: status,
       value: this.props.item.value
         ? this.props.item.value.toFixed(2) + '€'
         : '',
     };
+  }
+
+  _renderSpeed() {
+    if (this.state.speed !== '') {
+      return (
+        <View style={styles.infoLine}>
+          <MaterialCommunityIcons
+            name="speedometer"
+            style={styles.infoLineIcon}
+          />
+          <Text style={styles.infoLineLabel}>Vitesse: {this.state.speed}</Text>
+        </View>
+      );
+    } else {
+      return <Text></Text>;
+    }
   }
 
   _renderPostValidationInfo() {
@@ -121,15 +141,7 @@ export default class ActivityListItem extends Component {
                   Distance: {this.state.distance}
                 </Text>
               </View>
-              <View style={styles.infoLine}>
-                <MaterialCommunityIcons
-                  name="speedometer"
-                  style={styles.infoLineIcon}
-                />
-                <Text style={styles.infoLineLabel}>
-                  Vitesse: {this.state.speed}
-                </Text>
-              </View>
+              {this._renderSpeed()}
             </View>
           </View>
 

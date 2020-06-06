@@ -10,34 +10,41 @@ import {PODIUM_DETAILS_SCREEN} from 'src/navigation/Screens';
 class PodiumScreen extends PureComponent {
   constructor(props) {
     super(props);
+    _isMounted = false;
     this.state = {
-      userList: []
+      userList: [],
     };
   }
-  
-  
- 
 
   componentDidMount() {
-    Database.getUsersList(
-      (data) => {
-        this.setState({
-          userList: data,
-        });
-      },
-      (error) => {
-        console.log(error);
-      },
-    );
+    _isMounted = true;
+    if (this._isMounted) {
+      Database.getUsersList(
+        (data) => {
+          if (this._isMounted) {
+            this.setState({
+              userList: data,
+            });
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+    }
   }
 
-  handleUserSelected(user){
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  handleUserSelected(user) {
     Navigation.push(this.props.componentId, {
       component: {
         name: PODIUM_DETAILS_SCREEN,
         passProps: {
-          userId: user
-        }
+          userId: user,
+        },
       },
     });
   }
@@ -47,7 +54,7 @@ class PodiumScreen extends PureComponent {
   renderItem = ({item}) => (
     <ListItem
       title={item.displayName}
-      subtitle={item.totalValue}
+      subtitle={item.totalValue.toString()}
       leftAvatar={{source: {uri: item.photoURL}}}
       bottomDivider
       chevron
