@@ -50,7 +50,6 @@ class Database {
       });
   }
 
-
   static getUserProfile(userId, fnSuccess, fnError) {
     firestore()
       .collection('Users')
