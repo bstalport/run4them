@@ -2,7 +2,7 @@
  * @class Database
  */
 
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import {GoogleSignin} from '@react-native-community/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
 import Config from 'src/config/config';
@@ -19,9 +19,6 @@ class Authentication {
       .signOut()
       .then(() => {
         callback();
-      })
-      .catch(function (e) {
-        alert(e);
       });
   }
 
@@ -59,9 +56,9 @@ class Authentication {
   }
 
   static updateProfileName(name, fnSuccess, fnError) {
-    auth()
-      .currentUser.updateProfile({
-        displayName: name,
+    auth().currentUser
+      .updateProfile({
+        displayName: name
       })
       .then(function () {
         fnSuccess();
@@ -72,42 +69,18 @@ class Authentication {
   }
 
   static async loginWithGoogle(fnSuccess, fnError) {
-    try {
-      await GoogleSignin.hasPlayServices();
-      GoogleSignin.signIn()
-        .then((user) => {
-          const googleCredential = auth.GoogleAuthProvider.credential(
-            user.idToken,
-          );
+    await GoogleSignin.hasPlayServices();
+    const user = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(user.idToken);
 
-          return auth()
-            .signInWithCredential(googleCredential)
-            .then(() => {
-              fnSuccess();
-            })
-            .catch((error) => {
-              fnError(error);
-            });
-        })
-        .catch((error) => {
-          fnError(error);
-        });
-    } catch (error) {
-      let resp = '';
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        resp = 'Connexion annulée';
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-        resp = 'Connexion déjà en cours';
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        resp = 'Google play non disponible';
-      } else {
-        // some other error happened
-      }
-      fnError(resp);
-    }
+    return auth()
+      .signInWithCredential(googleCredential)
+      .then(() => {
+        fnSuccess();
+      })
+      .catch((error) => {
+        fnError(error);
+      });
   }
 
   static async loginWithFaceBook(fnSuccess, fnError) {

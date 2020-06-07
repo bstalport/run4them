@@ -10,7 +10,6 @@ import MyButton from 'src/components/MyButton';
 import Authentication from 'src/firebase/authentication';
 import {Overlay} from 'react-native-elements';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
-import {GoogleSigninButton} from '@react-native-community/google-signin';
 
 //import dismissKeyboard from 'react-native-dismiss-keyboard';
 
@@ -34,7 +33,7 @@ class LoginScreen extends PureComponent {
     this.resetPassword = this.resetPassword.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(){
     this.props.clearAll();
   }
 
@@ -47,34 +46,17 @@ class LoginScreen extends PureComponent {
       },
       (error) => {
         let resp = '';
-        switch (error.code) {
-          case 'auth/account-exists-with-different-credential':
-            resp =
-              'Cette addresse est déjà utilisée avec une autre méthode de connexion';
-            break;
-          case 'auth/invalid-credential' ||
-            'auth/operation-not-allowed' ||
-            'auth/invalid-verification-code' ||
-            'auth/invalid-verification-id':
-            resp = 'Erreur de connexion';
-            break;
-          case 'auth/user-disabled':
-            resp = 'Compte désactivé';
-            break;
-          case 'auth/wrong-password':
-            resp = 'Mot de passe incorrect';
-            break;
-          case 'auth/user-not-found':
-            resp = 'Utilisateur non trouvé';
-            break;
-          default:
-            if (error.nativeErrorMessage){
-              resp = error.nativeErrorMessage.toString()
-            }else if (error.message){
-              resp = error.message.toString()
-            }else{
-              resp = error.toString()
-            }
+        switch (error.code){
+          case 'auth/account-exists-with-different-credential': resp = 'Cette addresse est déjà utilisée avec une autre méthode de connexion'; break;
+          case 'auth/invalid-credential'
+            || 'auth/operation-not-allowed'
+            || 'auth/invalid-verification-code'
+            || 'auth/invalid-verification-id'
+          : resp = 'Erreur de connexion'; break;
+          case 'auth/user-disabled': resp = 'Compte désactivé'; break;
+          case 'auth/wrong-password': resp = 'Mot de passe incorrect'; break;
+          case 'auth/user-not-found': resp = 'Utilisateur non trouvé'; break;
+          default: error.nativeErrorMessage.toString();
         }
 
         this.setState({
@@ -93,34 +75,17 @@ class LoginScreen extends PureComponent {
       },
       (error) => {
         let resp = '';
-        switch (error.code) {
-          case 'auth/account-exists-with-different-credential':
-            resp =
-              'Cette addresse est déjà utilisée avec une autre méthode de connexion';
-            break;
-          case 'auth/invalid-credential' ||
-            'auth/operation-not-allowed' ||
-            'auth/invalid-verification-code' ||
-            'auth/invalid-verification-id':
-            resp = 'Erreur de connexion';
-            break;
-          case 'auth/user-disabled':
-            resp = 'Compte désactivé';
-            break;
-          case 'auth/wrong-password':
-            resp = 'Mot de passe incorrect';
-            break;
-          case 'auth/user-not-found':
-            resp = 'Utilisateur non trouvé';
-            break;
-          default:
-            if (error.nativeErrorMessage){
-              resp = error.nativeErrorMessage.toString()
-            }else if (error.message){
-              resp = error.message.toString()
-            }else{
-              resp = error.toString()
-            }
+        switch (error.code){
+          case 'auth/account-exists-with-different-credential': resp = 'Cette addresse est déjà utilisée avec une autre méthode de connexion'; break;
+          case 'auth/invalid-credential'
+            || 'auth/operation-not-allowed'
+            || 'auth/invalid-verification-code'
+            || 'auth/invalid-verification-id'
+          : resp = 'Erreur de connexion'; break;
+          case 'auth/user-disabled': resp = 'Compte désactivé'; break;
+          case 'auth/wrong-password': resp = 'Mot de passe incorrect'; break;
+          case 'auth/user-not-found': resp = 'Utilisateur non trouvé'; break;
+          default: error.nativeErrorMessage.toString();
         }
 
         this.setState({
@@ -141,22 +106,14 @@ class LoginScreen extends PureComponent {
         });
       },
       (error) => {
+
         let resp = '';
-        switch (error.code) {
-          case 'auth/invalid-email':
-            resp = 'Adresse non valide';
-            break;
-          case 'auth/user-not-found':
-            resp = 'Aucun compte correspondant';
-            break;
-          case 'auth/user-disabled':
-            resp = 'Compte désactivé';
-            break;
-          case 'auth/wrong-password':
-            resp = 'Mot de passe incorrect';
-            break;
-          default:
-            error.nativeErrorMessage.toString();
+        switch (error.code){
+          case 'auth/invalid-email': resp = 'Adresse non valide'; break;
+          case 'auth/user-not-found': resp = 'Aucun compte correspondant'; break;
+          case 'auth/user-disabled': resp = 'Compte désactivé'; break;
+          case 'auth/wrong-password': resp = 'Mot de passe incorrect'; break;
+          default: error.nativeErrorMessage.toString();
         }
 
         this.setState({
@@ -193,17 +150,12 @@ class LoginScreen extends PureComponent {
       },
       (error) => {
         let resp = '';
-        switch (error.code) {
-          case 'auth/invalid-email':
-            resp = 'Adresse non valide';
-            break;
-          case 'auth/user-not-found':
-            resp = 'Aucun compte correspondant';
-            break;
-          default:
-            error.nativeErrorMessage.toString();
+        switch (error.code){
+          case 'auth/invalid-email': resp = 'Adresse non valide'; break;
+          case 'auth/user-not-found': resp = 'Aucun compte correspondant'; break;
+          default: error.nativeErrorMessage.toString();
         }
-
+        
         this.setState({
           responseResetPassword: resp,
         });
@@ -213,9 +165,7 @@ class LoginScreen extends PureComponent {
 
   displayError(response) {
     if (response && response !== '') {
-      return (
-        <Text style={StylesGlobal.errorMessage}>{response.toString()}</Text>
-      );
+      return <Text style={StylesGlobal.errorMessage}>{response.toString()}</Text>;
     } else {
       return <Text></Text>;
     }
@@ -268,17 +218,10 @@ class LoginScreen extends PureComponent {
         </View>
         <View style={styles.emailLoginButtons}></View>
         <View style={styles.socialLogins}>
-          <GoogleSigninButton
-            style={{width: 75, height: 75}}
-            size={GoogleSigninButton.Size.Icon}
-            color={GoogleSigninButton.Color.Light}
-            onPress={this.loginWithGoogle}
-          />
-
-          {/* <MyButton
+          <MyButton
             icon="google"
             onPress={() => this.loginWithGoogle()}
-            style="login-google"></MyButton> */}
+            style="login-google"></MyButton>
 
           <MyButton
             icon="facebook"

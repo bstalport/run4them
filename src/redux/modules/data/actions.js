@@ -1,7 +1,6 @@
 // @flow
 
 import { createAction } from 'redux-actions';
-import { create } from 'react-test-renderer';
 
 export const GET_FACEBOOK_DATA = 'data/GET_FACEBOOK_DATA';
 export const GET_FACEBOOK_DATA_SUCCESS = 'data/GET_FACEBOOK_DATA_SUCCESS';

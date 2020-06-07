@@ -185,7 +185,7 @@ class Database {
     }
   }
 
-  static listenActivitiesHistory(fnSuccess, fnError) {
+  static listenUserProfile(fnSuccess, fnError) {
     const user = auth().currentUser; //Authentication.getCurrentUser();
     if (user) {
       firestore()

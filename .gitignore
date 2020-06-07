@@ -61,3 +61,4 @@ buck-out/
 run4them.code-workspace
 ios/GoogleService-Info.plist
 android/google-services.json
+android/java_pid2570.hprof

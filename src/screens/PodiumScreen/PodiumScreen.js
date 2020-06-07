@@ -10,12 +10,14 @@ import {PODIUM_DETAILS_SCREEN} from 'src/navigation/Screens';
 class PodiumScreen extends Component {
   constructor(props) {
     super(props);
-    _isMounted = false;
     this.state = {
-      userList: [],
+      userList: []
     };
     this.getUsers();
   }
+  
+  
+ 
 
   getUsers() {
     Database.getUsersList(
@@ -49,13 +51,13 @@ class PodiumScreen extends Component {
 
   }
 
-  handleUserSelected(user) {
+  handleUserSelected(user){
     Navigation.push(this.props.componentId, {
       component: {
         name: PODIUM_DETAILS_SCREEN,
         passProps: {
-          userId: user,
-        },
+          userId: user
+        }
       },
     });
   }

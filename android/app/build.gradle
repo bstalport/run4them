@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-//apply plugin: 'io.fabric'
 
 import com.android.build.OutputFile
 
@@ -81,7 +80,6 @@ project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
 
-
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
@@ -135,11 +133,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        multiDexEnabled true
         versionName "1.0"
-        manifestPlaceholders = [
-                appAuthRedirectScheme: 'org.reactjs.native.example.run4them'
-        ]
     }
     splits {
         abi {
@@ -198,20 +192,6 @@ dependencies {
     implementation project(':react-native-navigation')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation 'com.google.guava:guava:27.0.1-android'
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:23.0.1"
-    implementation 'com.google.android.gms:play-services-auth:18.0.0'
-    // Recommended: Add the Firebase SDK for Google Analytics.
-    implementation 'com.google.firebase:firebase-analytics:17.4.3'
-
-    // Add the Firebase Crashlytics SDK.
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
-
-    //implementation(project(":react-native-google-signin"))
-    //implementation 'com.google.firebase:firebase-analytics-ktx:17.4.3'
-    //implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
@@ -230,9 +210,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-//implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
-
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
-//apply plugin: 'io.fabric'
-//apply plugin: 'com.google.firebase.crashlytics'

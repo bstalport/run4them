@@ -9,10 +9,11 @@ import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 
 class ActivityHistoryScreen extends Component {
   constructor(props) {
+    _isMounted = false;
     super(props);
     this.state = {};
     this.getActivities = this.getActivities.bind(this);
-    this.getActivities();
+    //this.getActivities();
   }
 
   getActivities() {
@@ -27,7 +28,7 @@ class ActivityHistoryScreen extends Component {
       },
     );
 
-    Database.listenActivitiesHistory(
+    Database.listenUserProfile(
       (data) => {
         var array = [];
         data.forEach((element) => {
@@ -36,8 +37,8 @@ class ActivityHistoryScreen extends Component {
             ...element.data(),
           });
         });
-        this.props.setActivityHistory({
-          activityHistory: array,
+        this.setState({
+          activities: array,
         });
       },
       (error) => {
@@ -51,11 +52,14 @@ class ActivityHistoryScreen extends Component {
   componentWillUnmount() {}
 
   render() {
+    //console.log(this.state.activities); //<ActivityListItem item={item} style={styles.item} />//{this.state.activities}
+    //console.log(this.state.listUpdated);
     return (
       <View style={StylesGlobal.container}>
+        
         <FlatList
           //style={styles.listContainer}
-          data={this.props.data.activityHistory}
+          data={this.state.activities}
           renderItem={({item}) => (
             <ActivityHistoryListItem item={item} style={styles.item} />
           )}

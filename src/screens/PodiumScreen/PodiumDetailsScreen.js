@@ -1,4 +1,4 @@
-import React, {PureComponent, useEffect} from 'react';
+import React, {PureComponent,useEffect} from 'react';
 import {StyleSheet, View, FlatList, Text} from 'react-native';
 import {connectData} from 'src/redux';
 import Database from 'src/firebase/database';
@@ -18,6 +18,8 @@ class PodiumDetailsScreen extends PureComponent {
 
   }
 
+  
+  
   componentDidMount() {
     this._isMounted = true;
     if (this._isMounted) {
@@ -28,6 +30,7 @@ class PodiumDetailsScreen extends PureComponent {
   componentWillUnmount() {
     this._isMounted = false;
   }
+
 
   getActivities(userId) {
     if (userId) {
@@ -47,9 +50,26 @@ class PodiumDetailsScreen extends PureComponent {
     }
   }
 
+  /*componentDidMount() {
+    this.navigationEventListener = Navigation.events().bindComponent(this);
+  }
+
+  componentWillUnmount() {
+    // Not mandatory
+    if (this.navigationEventListener) {
+      this.navigationEventListener.remove();
+    }
+  }
+
+  componentDidAppear() {
+    getActivities(this.props.userId);
+  }*/
+ 
   render() {
+
     return (
       <View style={StylesGlobal.container}>
+        
         <FlatList
           data={this.state.activities}
           renderItem={({item}) => (

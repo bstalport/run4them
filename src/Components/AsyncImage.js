@@ -6,7 +6,6 @@ import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 export default class AsyncImage extends React.Component {
   constructor(props) {
     super(props);
-    _isMounted = false;
     this.state = {
       loading: true,
       mounted: true,
@@ -16,7 +15,7 @@ export default class AsyncImage extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this.setState({isMounted: true});
     this.getAndLoadHttpUrl();
   }
 
@@ -26,22 +25,24 @@ export default class AsyncImage extends React.Component {
       ref
         .getDownloadURL()
         .then((data) => {
-          if (this._isMounted == true) {
-            this.setState({url: data});
-            this.setState({loading: false});
-          }
+          this.setState({url: data});
+          this.setState({loading: false});
         })
         .catch((error) => {
-          if (this._isMounted == true) {
-            this.setState({url: '/images/logos/Logo-Default.png'});
-            this.setState({loading: false});
-          }
+          this.setState({url: '/images/logos/Logo-Default.png'});
+          this.setState({loading: false});
         });
     }
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this.setState({isMounted: false});
+  }
+
+  componentWillReceiveProps(props) {
+    this.props = props;
+    /*if (this.props.refresh == true) {
+    }*/
   }
 
   render() {
