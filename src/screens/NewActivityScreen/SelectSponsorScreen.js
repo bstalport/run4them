@@ -11,18 +11,18 @@ import MyButton from 'src/components/MyButton';
 class SelectSponsorScreen extends PureComponent {
   constructor(props) {
     super(props);
+    this.getSponsorsList();
     this.state = {
       sponsorId: '',
-      sponsorsList: [],
     };
   }
 
-  componentDidMount() {
+  componentDidMount() {}
+
+  getSponsorsList() {
     Database.getSponsors(
       (data) => {
-        this.setState({
-          sponsorsList: data,
-        });
+        this.props.setSponsorsList({sponsorList: data});
       },
       (error) => {
         console.log(error);
@@ -37,7 +37,7 @@ class SelectSponsorScreen extends PureComponent {
   }
 
   goToAd() {
-    const selectedSponsor = this.state.sponsorsList.filter(
+    const selectedSponsor = this.props.data.sponsorList.filter(
       (s) => s.sponsorId == this.state.sponsorId,
     );
     if (selectedSponsor.length === 1) {
@@ -60,7 +60,7 @@ class SelectSponsorScreen extends PureComponent {
         </Text>
 
         <FlatList
-          data={this.state.sponsorsList}
+          data={this.props.data.sponsorList}
           renderItem={({item}) => (
             <TouchableOpacity
               style={

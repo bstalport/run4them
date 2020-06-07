@@ -2,18 +2,18 @@ import React, {Component} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import PropTypes from 'prop-types';
 import convert from 'convert-units';
+
 
 export default class ActivityListItem extends Component {
   constructor(props) {
     super(props);
 
     const startDate = this.props.item.startTime
-      ? new Date(this.props.item.startTime.seconds * 1000).toLocaleDateString()
+      ? new Date(this.props.item.startTime._seconds * 1000).toLocaleDateString()
       : '';
     const endDate = this.props.item.endDate
-      ? new Date(this.props.item.endDate.seconds * 1000).toLocaleDateString()
+      ? new Date(this.props.item.endDate._seconds * 1000).toLocaleDateString()
       : '';
     const distance =
       this.props.item.distance < 1000
@@ -55,6 +55,7 @@ export default class ActivityListItem extends Component {
     }
   }
 
+
   render() {
     return (
       <View style={styles.itemContainer}>
@@ -95,15 +96,7 @@ export default class ActivityListItem extends Component {
                   Distance: {this.state.distance}
                 </Text>
               </View>
-              <View style={styles.infoLine}>
-                <MaterialCommunityIcons
-                  name="speedometer"
-                  style={styles.infoLineIcon}
-                />
-                <Text style={styles.infoLineLabel}>
-                  Vitesse: {this.state.speed}
-                </Text>
-              </View>
+              {this._renderSpeed()}
             </View>
           </View>
         </TouchableOpacity>

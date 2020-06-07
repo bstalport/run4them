@@ -2,15 +2,13 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, View, FlatList, Button, Text} from 'react-native';
+import {StyleSheet, Platform, View, FlatList, Button, Text} from 'react-native';
 
 import {connectData} from 'src/redux';
 import AppleHealthKit from 'rn-apple-healthkit';
 import {authorize} from 'react-native-app-auth';
 import Config from 'src/config/config';
 import ActivityListItem from 'src/components/ActivityListItem';
-import {pushStravaAuth} from 'src/navigation';
-import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import MapView, {Polyline, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Authentication from 'src/firebase/authentication';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
@@ -22,8 +20,7 @@ import MyButton from 'src/components/MyButton';
 class NewActivityScreen extends Component {
   constructor(props) {
     super(props);
-    props.data.activities = [];
-
+    
     this.state = {
     };
   }
@@ -31,14 +28,17 @@ class NewActivityScreen extends Component {
   componentDidUpdate(nextProps) {}
 
   componentDidMount() {
-    this.authHealthKit();
+    if (Platform.OS === 'ios'){
+      this.authHealthKit();
+    }
   }
 
   componentWillUnmount() {}
 
   authHealthKit() {
     let enddate = new Date();
-    let startdate = new Date(enddate.getDate() - 30);
+    let startdate = new Date();
+    startdate = new Date(startdate.setDate(startdate.getDate() - Config.periodOfActivityToRead)) ;
       
     let options = {
       permissions: {
@@ -60,12 +60,12 @@ class NewActivityScreen extends Component {
         if (err) {
           return console.error(err);
         }
-        let workouts = results.filter((result) => result.activityId != null);
+        let workouts = results.filter((result) => result.activityId == 37 || result.activityId == 52); //37=Running, Walking=52 (check IOS type HKWorkoutActivityType )
 
         if (workouts.length > 0) {
           const user = Authentication.getCurrentUser();
-          if (user.uid) {
-            this.props.clearActivities();
+          if (user && user.uid) {
+            //this.props.clearActivities();
             this.props.setHealthKitActivities({
               healthKitActivities: workouts,
             });
@@ -88,7 +88,7 @@ class NewActivityScreen extends Component {
     };
 
     const token = await authorize(config);
-    this.props.clearActivities();
+    //this.props.clearActivities();
     this.props.getStravaActivities({
       stravaAccessToken: token.accessToken,
     });
