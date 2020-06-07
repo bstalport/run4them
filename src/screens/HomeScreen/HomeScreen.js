@@ -5,6 +5,7 @@ import {Navigation} from 'react-native-navigation';
 import {PROFILE_SCREEN, NEW_ACTIVITY_SCREEN} from 'src/navigation/Screens';
 import MyButton from 'src/components/MyButton';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
+import Database from 'src/firebase/database';
 import messaging, {AuthorizationStatus} from '@react-native-firebase/messaging';
 //import firebase from '@react-native-firebase';
 import iid from '@react-native-firebase/iid';
@@ -48,8 +49,11 @@ class HomeScreen extends PureComponent {
       bottomTabs: {
         currentTabId: 'NEW_ACTIVITY_TAB',
       },
-    });
-    
+    }); 
+  }
+
+  deleteAllActivities(){
+    Database.deleteAllActivities(this.props.data.activityHistory);
   }
 
   render() {
@@ -59,6 +63,11 @@ class HomeScreen extends PureComponent {
           text="Enregistrer une activité"
           onPress={() => this.navToNewActivity()}
           style="main"></MyButton>
+
+        <MyButton
+          text="Supprimer toutes les activités (test)"
+          onPress={() => this.deleteAllActivities()}
+          style="link"></MyButton>
       </View>
     );
   }

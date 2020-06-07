@@ -15,6 +15,8 @@ export const USER_PROFILE = 'data/USER_PROFILE';
 export const CLEAR_ALL = 'data/CLEAR_ALL';
 export const SET_ACTIVITY_HISTORY = 'data/SET_ACTIVITY_HISTORY';
 export const SET_SPONSORS_LIST = 'data/SET_SPONSORS_LIST';
+export const SET_USERS_LIST = 'data/SET_USERS_LIST';
+export const SET_TOTALS = 'data/SET_TOTALS';
 
 export const fetchDataActionCreators = {
   getFacebookUserData: createAction(GET_FACEBOOK_DATA),
@@ -28,5 +30,7 @@ export const fetchDataActionCreators = {
   setUserProfile:createAction(USER_PROFILE),
   clearAll:createAction(CLEAR_ALL),
   setActivityHistory:createAction(SET_ACTIVITY_HISTORY),
-  setSponsorsList:createAction(SET_SPONSORS_LIST)
+  setSponsorsList:createAction(SET_SPONSORS_LIST),
+  setUsersList:createAction(SET_USERS_LIST),
+  setTotals:createAction(SET_TOTALS),
 };

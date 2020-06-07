@@ -4,7 +4,7 @@ import {connectData} from 'src/redux';
 import Database from 'src/firebase/database';
 import {Navigation} from 'react-native-navigation';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
-import ActivityListItem from 'src/components/ActivityListItem';
+import ActivityHistoryListItem from 'src/components/ActivityHistoryListItem';
 
 class PodiumDetailsScreen extends PureComponent {
   constructor(props) {
@@ -13,6 +13,9 @@ class PodiumDetailsScreen extends PureComponent {
     this.state = {
       activities: [],
     };
+
+
+
   }
 
   componentDidMount() {
@@ -27,26 +30,21 @@ class PodiumDetailsScreen extends PureComponent {
   }
 
   getActivities(userId) {
-    Database.getActivities(
-      (data) => {
-        var array = [];
-        data.forEach((element) => {
-          array.push({
-            id: element.id,
-            ...element.data(),
-          });
-        });
-        if (this._isMounted) {
-          this.setState({
-            activities: array,
-          });
-        }
-      },
-      (error) => {
-        console.log(error);
-      },
-      userId,
-    );
+    if (userId) {
+      Database.getActivities(
+        (data) => {
+          if (this._isMounted) {
+            this.setState({
+              activities: data,
+            });
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+        userId,
+      );
+    }
   }
 
   render() {
@@ -55,7 +53,7 @@ class PodiumDetailsScreen extends PureComponent {
         <FlatList
           data={this.state.activities}
           renderItem={({item}) => (
-            <ActivityListItem
+            <ActivityHistoryListItem
               //callbackFn={this.handleActivitySelected}
               item={item}
               style={styles.item}

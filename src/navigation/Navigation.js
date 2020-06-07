@@ -21,6 +21,9 @@ import {
 import registerScreens from './registerScreens';
 import Authentication from 'src/firebase/authentication';
 
+//import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+//const userIcon = await MaterialCommunityIcons.getImageSource('user', 30, 'red');
+
 // Register all screens on launch
 registerScreens();
 
@@ -357,7 +360,6 @@ export function pushHomeScreen() {
               options: {
                 bottomTab: {
                   icon: require('assets/icons/ic_tab_info.png'),
-                  testID: 'INFO_SCREEN',
                   text: 'Info',
                 },
               },
@@ -396,9 +398,6 @@ export function pushHomeScreen() {
               options: {
                 bottomTab: {
                   icon: require('assets/icons/ic_tab_menu.png'),
-                  color: 'black',
-                  fontSize: '10px',
-                  testID: 'ACTIVITY_HISTORY_SCREEN',
                   text: 'Activités',
                 },
               },
@@ -456,9 +455,7 @@ export function pushHomeScreen() {
               ],
               options: {
                 bottomTab: {
-                  icon: require('assets/icons/ic_tab_menu.png'),
-                  color: 'black',
-                  fontSize: '10px',
+                  icon: require('assets/icons/ic_tab_podium.png'),
                   text: 'Résultats',
                 },
               },

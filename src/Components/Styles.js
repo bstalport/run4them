@@ -41,6 +41,10 @@ export const StylesGlobal = StyleSheet.create({
       paddingTop:20,
       color :ColorPalette.textLevel1,
   },
+  label:{
+    paddingTop:20,
+    color :ColorPalette.textLevel3,
+},
   title1:{
       color:ColorPalette.textLevel2,
       fontSize:20,

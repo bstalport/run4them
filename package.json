@@ -39,6 +39,7 @@
     "react-native-gesture-handler": "^1.6.1",
     "react-native-maps": "^0.26.1",
     "react-native-navigation": "^6.7.1",
+    "react-native-navigation-hooks": "^6.0.2",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.8.0",

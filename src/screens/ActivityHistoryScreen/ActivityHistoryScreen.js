@@ -4,13 +4,13 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import Database from 'src/firebase/database';
 import {connectData} from 'src/redux';
-import ActivityListItem from 'src/components/ActivityListItem';
+import ActivityHistoryListItem from 'src/components/ActivityHistoryListItem';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 
 class ActivityHistoryScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = {};
     this.getActivities = this.getActivities.bind(this);
     this.getActivities();
   }
@@ -18,16 +18,9 @@ class ActivityHistoryScreen extends Component {
   getActivities() {
     Database.getActivities(
       (data) => {
-        var array = [];
-        data.forEach((element) => {
-          array.push({
-            id: element.id,
-            ...element.data(),
-          });
+        this.props.setActivityHistory({
+          activityHistory: data,
         });
-          this.props.setActivityHistory({
-            activityHistory: array,
-          });
       },
       (error) => {
         console.log(error);
@@ -53,14 +46,9 @@ class ActivityHistoryScreen extends Component {
     );
   }
 
-  handleActivitySelected() {}
-  componentDidMount() {
-    
-  }
+  componentDidMount() {}
 
-  componentWillUnmount() {
-    
-  }
+  componentWillUnmount() {}
 
   render() {
     return (
@@ -69,11 +57,7 @@ class ActivityHistoryScreen extends Component {
           //style={styles.listContainer}
           data={this.props.data.activityHistory}
           renderItem={({item}) => (
-            <ActivityListItem
-              callbackFn={this.handleActivitySelected}
-              item={item}
-              style={styles.item}
-            />
+            <ActivityHistoryListItem item={item} style={styles.item} />
           )}
           //keyExtractor={(item, index) => index.toString()}
           //randomUpdateProp={this.state.listUpdated}

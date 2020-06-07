@@ -21,6 +21,7 @@ export default class AsyncImage extends React.Component {
   }
 
   async getAndLoadHttpUrl() {
+    if (this.props.image && this.props.image !== '') {
       const ref = storage().ref(this.props.image);
       ref
         .getDownloadURL()
@@ -36,7 +37,7 @@ export default class AsyncImage extends React.Component {
             this.setState({loading: false});
           }
         });
-    
+    }
   }
 
   componentWillUnmount() {

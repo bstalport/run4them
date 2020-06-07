@@ -59,3 +59,5 @@ buck-out/
 /ios/Pods/
 /src/config/config.js
 run4them.code-workspace
+ios/GoogleService-Info.plist
+android/google-services.json

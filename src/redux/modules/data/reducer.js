@@ -15,6 +15,8 @@ import {
   CLEAR_ALL,
   SET_ACTIVITY_HISTORY,
   SET_SPONSORS_LIST,
+  SET_USERS_LIST,
+  SET_TOTALS,
 } from './actions';
 
 export const DEFAULT = {};
@@ -43,6 +45,18 @@ export default function data(state = DEFAULT, action = {}) {
         activitiesUpdated: false,
       };
     }
+
+    case SET_TOTALS:{
+      if (payload.totals) {
+        return {
+          ...state,
+          totals:payload.totals
+        };
+      } else {
+        return state;
+      }
+    }
+
 
     case SET_SPONSORS_LIST:{
       if (payload.sponsorList) {
@@ -248,6 +262,17 @@ export default function data(state = DEFAULT, action = {}) {
         return {
           ...state,
           userProfile: payload.userProfile,
+        };
+      } else {
+        return state;
+      }
+    }
+
+    case SET_USERS_LIST: {
+      if (payload) {
+        return {
+          ...state,
+          usersList: payload.usersList,
         };
       } else {
         return state;

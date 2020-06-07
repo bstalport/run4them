@@ -50,6 +50,7 @@ class Database {
       });
   }
 
+
   static getUserProfile(userId, fnSuccess, fnError) {
     firestore()
       .collection('Users')
@@ -71,15 +72,21 @@ class Database {
         let aRes = [];
         DocReference.docs.map((act) =>
           aRes.push({
-            id:act.id,
+            id: act.id,
             ...act.data(),
-          })
+          }),
         );
         fnSuccess(aRes);
       })
       .catch((error) => {
         fnError(error);
       });
+  }
+
+  static listenUsersList(fnSuccess, fnError) {
+      firestore()
+        .collection('Users')
+        .onSnapshot(fnSuccess, fnError);
   }
 
   static getSponsors(fnSuccess, fnError) {
@@ -134,19 +141,43 @@ class Database {
     let userId = '';
     if (uId) {
       userId = uId;
-    }else{
-      userId = (auth().currentUser) ? auth().currentUser.uid : '';
+    } else {
+      userId = auth().currentUser ? auth().currentUser.uid : '';
     }
     const user = auth().currentUser; //Authentication.getCurrentUser();
     if (user && userId != '') {
-      //let today = new Date();
+      
       firestore()
         .collection('Activities')
-        //.where('creationTime', '<=', today)
         .where('userId', '==', userId)
         .get()
-        .then((querySnapshot) => {
-          fnSuccess(querySnapshot);
+        .then((querySnapshotActivity) => {
+        
+          firestore()
+            .collection('Sponsors').get()
+            .then((querySnapshotSponsor) => {
+
+              let array = [];
+              let dataActivity = querySnapshotActivity.docs;    
+              let dataSponsor = querySnapshotSponsor.docs;
+              
+              dataActivity.forEach((element) => {
+                const data = element.data();
+                const sponsor = dataSponsor.filter((item) => 
+                  item.id === data.sponsorId
+                );
+
+                array.push({
+                  id: element.id,
+                  ...data,
+                  sponsor: (sponsor.length > 0) ? sponsor[0].data() : null,
+                });
+              });
+              fnSuccess(array);
+            })
+            .catch((error) => {
+              fnError(error);
+            });
         })
         .catch((error) => {
           fnError(error);
@@ -164,12 +195,25 @@ class Database {
     }
   }
 
+
+  static deleteAllActivities(aActivityList){
+    aActivityList.forEach((item) => {
+      firestore()
+      .collection('Activities')
+      .doc(item.id)
+      .delete()
+      .then(() => {
+        console.log('Activity deleted:',item.id);
+      });
+    })
+  }
+
   static createActivity(data, fnSuccess, fnError) {
+    delete data.sponsor;
     firestore()
       .collection('Activities')
       .add({
         ...data,
-        sponsor:null,
         creationTime: firestore.Timestamp.now(),
       })
       .then((DocReference) => {
@@ -209,15 +253,21 @@ class Database {
 
   static getTotals(fnSuccess, fnError) {
     firestore()
-      .collection('Totals')
+      .collection('Totals').doc('totals')
       .get()
-      .then((querySnapshot) => {
-        fnSuccess(querySnapshot);
+      .then((docSnapshot) => {
+        fnSuccess(docSnapshot);
       })
       .catch((error) => {
         fnError(error);
       });
   }
+
+  static listenTotals(fnSuccess, fnError) {
+    firestore()
+      .collection('Totals').doc('totals')
+      .onSnapshot(fnSuccess, fnError);
+}
 
   /*
   static createNewRace(userId,fnSuccess, fnError) {

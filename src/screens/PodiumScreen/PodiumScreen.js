@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, View, FlatList, Text} from 'react-native';
 import {connectData} from 'src/redux';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
@@ -7,35 +7,46 @@ import Database from 'src/firebase/database';
 import {Navigation} from 'react-native-navigation';
 import {PODIUM_DETAILS_SCREEN} from 'src/navigation/Screens';
 
-class PodiumScreen extends PureComponent {
+class PodiumScreen extends Component {
   constructor(props) {
     super(props);
     _isMounted = false;
     this.state = {
       userList: [],
     };
+    this.getUsers();
   }
 
-  componentDidMount() {
-    _isMounted = true;
-    if (this._isMounted) {
-      Database.getUsersList(
-        (data) => {
-          if (this._isMounted) {
-            this.setState({
-              userList: data,
-            });
-          }
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
-    }
-  }
+  getUsers() {
+    Database.getUsersList(
+      (data) => {
+        this.props.setUsersList({
+          usersList: data,
+        });
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
 
-  componentWillUnmount() {
-    this._isMounted = false;
+    Database.listenUsersList(
+      (data) => {
+        var array = [];
+        data.forEach((element) => {
+          array.push({
+            id: element.id,
+            ...element.data(),
+          });
+        });
+        this.props.setUsersList({
+          usersList: array
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
+
   }
 
   handleUserSelected(user) {
@@ -54,7 +65,8 @@ class PodiumScreen extends PureComponent {
   renderItem = ({item}) => (
     <ListItem
       title={item.displayName}
-      subtitle={item.totalValue.toString()}
+      subtitle={item.totalValue.toFixed(2).toString() + '€'}
+      subtitleStyle={styles.subtitle}
       leftAvatar={{source: {uri: item.photoURL}}}
       bottomDivider
       chevron
@@ -67,7 +79,7 @@ class PodiumScreen extends PureComponent {
       <View style={StylesGlobal.container}>
         <FlatList
           keyExtractor={this.keyExtractor}
-          data={this.state.userList}
+          data={this.props.data.usersList}
           renderItem={this.renderItem}
         />
       </View>
@@ -76,4 +88,9 @@ class PodiumScreen extends PureComponent {
 }
 
 export default connectData()(PodiumScreen);
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  subtitle:{
+    fontSize:12,
+    color: ColorPalette.textLevel4,
+  }
+});

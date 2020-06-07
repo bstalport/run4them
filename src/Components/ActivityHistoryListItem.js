@@ -3,9 +3,9 @@ import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import convert from 'convert-units';
+import AsyncImage from 'src/components/AsyncImage';
 
-
-export default class ActivityListItem extends Component {
+export default class ActivityHistoryListItem extends Component {
   constructor(props) {
     super(props);
 
@@ -25,7 +25,18 @@ export default class ActivityListItem extends Component {
     const speed = this.props.item.average_speed
       ? this.props.item.average_speed.toFixed(2) + 'm/km'
       : ''; //convert(this.props.item.average_speed).from('m/h').to('km/h').toFixed(3);
-    
+    let status = '';
+    switch (this.props.item.status) {
+      case 'pending':
+        status = 'Validation en cours';
+        break;
+      case 'validated':
+        status = 'Validé, merci!';
+        break;
+      default:
+        status = '';
+        break;
+    }
 
     this.state = {
       activityId: this.props.item.activityId,
@@ -36,6 +47,17 @@ export default class ActivityListItem extends Component {
       duration: duration,
       distance: distance,
       speed: speed,
+      showValue:
+        this.props.item.status && this.props.item.status == 'validated'
+          ? true
+          : false,
+      status: status,
+      value: this.props.item.value
+        ? this.props.item.value.toFixed(2) + '€'
+        : '',
+      sponsor: this.props.item.sponsor
+        ? this.props.item.sponsor
+        : {logoUrl: ''},
     };
   }
 
@@ -55,51 +77,65 @@ export default class ActivityListItem extends Component {
     }
   }
 
-
   render() {
     return (
       <View style={styles.itemContainer}>
-        <TouchableOpacity
-          onPress={() => this.props.callbackFn(this.state.activityId)}>
-          <View style={styles.titleContainer}>
+        <View style={styles.titleContainer}>
+          <View style={styles.detailsContainerLeft}>
+            <AsyncImage
+              image={this.state.sponsor.logoUrl}
+              style={{
+                width: 100,
+                height: 100,
+                resizeMode: 'contain',
+              }}></AsyncImage>
+          </View>
+          <View style={styles.detailsContainerRight}>
             <Text style={styles.title}>{this.state.activityName}</Text>
             <Text style={styles.source}>{this.state.source}</Text>
-          </View>
-          <View style={styles.title2Container}>
-            <View style={styles.detailsContainer}>
-              <View style={styles.infoLine}>
-                <MaterialCommunityIcons
-                  name="calendar"
-                  style={styles.infoLineIcon}
-                />
-                <Text style={styles.infoLineLabel}>
-                  Date: {this.state.startTime}
-                </Text>
-              </View>
-              <View style={styles.infoLine}>
-                <MaterialCommunityIcons
-                  name="timer"
-                  style={styles.infoLineIcon}
-                />
-                <Text style={styles.infoLineLabel}>
-                  Duration: {this.state.duration}
-                </Text>
-              </View>
+            <View style={styles.infoLine}>
+              <MaterialCommunityIcons
+                name="calendar"
+                style={styles.infoLineIcon}
+              />
+              <Text style={styles.infoLineLabel}>
+                Date: {this.state.startTime}
+              </Text>
             </View>
-            <View style={styles.detailsContainer}>
-              <View style={styles.infoLine}>
-                <MaterialCommunityIcons
-                  name="map-marker-distance"
-                  style={styles.infoLineIcon}
-                />
-                <Text style={styles.infoLineLabel}>
-                  Distance: {this.state.distance}
-                </Text>
-              </View>
-              {this._renderSpeed()}
+            <View style={styles.infoLine}>
+              <MaterialCommunityIcons
+                name="timer"
+                style={styles.infoLineIcon}
+              />
+              <Text style={styles.infoLineLabel}>
+                Duration: {this.state.duration}
+              </Text>
+            </View>
+            <View style={styles.infoLine}>
+              <MaterialCommunityIcons
+                name="map-marker-distance"
+                style={styles.infoLineIcon}
+              />
+              <Text style={styles.infoLineLabel}>
+                Distance: {this.state.distance}
+              </Text>
+            </View>
+            {this._renderSpeed()}
+
+            <View style={styles.infoLine}>
+              <MaterialCommunityIcons
+                name="coins"
+                style={styles.infoLineIcon}
+              />
+              <Text style={styles.infoLineLabel}>
+                Argent récolté: {this.state.value}
+              </Text>
+            </View>
+            <View style={styles.infoLine}>
+              <Text style={styles.infoLineStatus}>{this.state.status}</Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -119,8 +155,12 @@ const styles = StyleSheet.create({
     width: '100%',
     marginLeft: 15,
   },
-  detailsContainer: {
-    width: '50%',
+  detailsContainerLeft: {
+    width: '40%',
+    padding: 10,
+  },
+  detailsContainerRight: {
+    width: '60%',
   },
   infoLine: {
     justifyContent: 'flex-start',
@@ -136,6 +176,13 @@ const styles = StyleSheet.create({
   },
   infoLineLabel: {
     color: ColorPalette.textLevel4,
+    fontSize: 12,
+  },
+
+  infoLineStatus:{
+    color: ColorPalette.colorLevel1,
+    fontWeight: 'bold',
+    fontSize: 12,
   },
   item: {
     backgroundColor: '#f9c2ff',

@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
 import {pushHomeScreen} from 'src/navigation';
 import {connectData} from 'src/redux';
-
+import {StylesGlobal, ColorPalette} from 'src/components/Styles';
 import MyButton from 'src/components/MyButton';
 
 class SelectSponsorScreen extends PureComponent {
@@ -17,8 +17,8 @@ class SelectSponsorScreen extends PureComponent {
 
   render() {
     return (
-      <View>
-        <Text>Merci c'est validé</Text>
+      <View style={StylesGlobal.container}>
+        <Text style={StylesGlobal.title1}>Merci c'est validé</Text>
 
         <MyButton
             text="Retour"
