@@ -28,7 +28,7 @@
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "16.8.6",
-    "react-native": "0.60.6",
+    "react-native": "0.62.3",
     "react-native-app-auth": "^5.1.2",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-background-fetch": "^3.0.6",
